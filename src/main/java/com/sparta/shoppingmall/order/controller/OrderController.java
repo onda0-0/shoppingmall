@@ -2,6 +2,7 @@ package com.sparta.shoppingmall.order.controller;
 
 import com.sparta.shoppingmall.base.dto.CommonResponse;
 import com.sparta.shoppingmall.order.dto.OrderListResponseDto;
+import com.sparta.shoppingmall.order.dto.OrderRequestDto;
 import com.sparta.shoppingmall.order.dto.OrderResponseDto;
 import com.sparta.shoppingmall.order.entity.Order;
 import com.sparta.shoppingmall.order.service.OrderService;
@@ -23,9 +24,8 @@ public class OrderController {
     //상품 주문
     @PostMapping
     public ResponseEntity<CommonResponse<OrderResponseDto>> createOrder(@RequestParam Long userid,
-                                                      @RequestParam String shippingAddress,
-                                                      @RequestParam int totalPrice) {
-        OrderResponseDto orderResponse = orderService.createOrder(userid, shippingAddress, totalPrice);
+                                                      @RequestBody OrderRequestDto orderRequestDto) {
+        OrderResponseDto orderResponse = orderService.createOrder(userid, orderRequestDto);
         CommonResponse<OrderResponseDto> response = CommonResponse.<OrderResponseDto>builder()
                 .statusCode(200)
                 .message("Order Success")

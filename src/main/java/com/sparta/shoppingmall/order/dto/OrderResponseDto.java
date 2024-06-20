@@ -2,14 +2,18 @@ package com.sparta.shoppingmall.order.dto;
 
 import com.sparta.shoppingmall.order.entity.Order;
 import com.sparta.shoppingmall.order.status.OrderStatus;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class OrderResponseDto {
-    private Long orderid;
-    private Long userid;
-    private String address;
-    private int totalPrice;
-    private OrderStatus status;
+    private final Long orderid;
+    private final Long userid;
+    private final String address;
+    private final int totalPrice;
+    private final OrderStatus status;
 
+    @Builder
     public OrderResponseDto(Order order) {
         this.orderid = order.getId();
         this.userid = order.getUserid();

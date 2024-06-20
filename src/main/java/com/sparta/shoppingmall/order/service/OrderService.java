@@ -1,6 +1,7 @@
 package com.sparta.shoppingmall.order.service;
 
 import com.sparta.shoppingmall.order.dto.OrderListResponseDto;
+import com.sparta.shoppingmall.order.dto.OrderRequestDto;
 import com.sparta.shoppingmall.order.dto.OrderResponseDto;
 import com.sparta.shoppingmall.order.entity.Order;
 import com.sparta.shoppingmall.order.repository.OrderRepository;
@@ -18,11 +19,11 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Transactional
-    public OrderResponseDto createOrder(Long userId, String address, int totalPrice) {
+    public OrderResponseDto createOrder(Long userId, OrderRequestDto orderRequestDto) {
         Order order = Order.builder()
                 .userid(userId)
-                .address(address)
-                .totalPrice(totalPrice)
+                .address(orderRequestDto.getAddress())
+                .totalPrice(orderRequestDto.getTotalPrice())
                 .build();
         order.approvedStatus();
         orderRepository.save(order);

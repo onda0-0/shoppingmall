@@ -3,13 +3,16 @@ package com.sparta.shoppingmall.order.entity;
 import com.sparta.shoppingmall.base.entity.Timestamped;
 import com.sparta.shoppingmall.order.status.OrderStatus;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @Entity
-@NoArgsConstructor
+@Table(name = "order")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends Timestamped{
 
     @Id
@@ -34,7 +37,6 @@ public class Order extends Timestamped{
         this.userid = userid;
         this.address = address;
         this.totalPrice = totalPrice;
-        this.status = OrderStatus.PAYING;
     }
 
     public void approvedStatus(){this.status = OrderStatus.APPROVED;}
