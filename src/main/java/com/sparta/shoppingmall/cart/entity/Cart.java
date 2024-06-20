@@ -32,6 +32,10 @@ public class Cart {
         this.cartProducts.add(cartProduct);
     }
 
+    public void removeCartProduct(CartProduct cartProduct) {
+        this.cartProducts.remove(cartProduct);
+    }
+
     public static Cart createCart(/*User user*/) {
         Cart cart = new Cart();
         //cart.setUser(user);

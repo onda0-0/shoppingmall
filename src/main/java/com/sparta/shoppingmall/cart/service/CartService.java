@@ -3,6 +3,7 @@ package com.sparta.shoppingmall.cart.service;
 import com.sparta.shoppingmall.cart.dto.CartProductRequest;
 import com.sparta.shoppingmall.cart.dto.CartProductResponse;
 import com.sparta.shoppingmall.cart.dto.CartResponse;
+import com.sparta.shoppingmall.cart.entity.CartProduct;
 import com.sparta.shoppingmall.cart.repository.CartProductRepository;
 import com.sparta.shoppingmall.cart.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,7 @@ public class CartService {
 //    }
 
     /**
-     * 장바구니에 상품 담기
-     * @param cartProductRequest
-     * @return
+     * 장바구니에 상품 단건 담기
      */
     @Transactional
     public CartProductResponse addCartProduct(CartProductRequest cartProductRequest/*, Long userId*/) {
@@ -53,9 +52,7 @@ public class CartService {
     }
 
     /**
-     * 장바구니에 상품 조회
-     * @param pageable
-     * @return
+     * 장바구니에 상품 리스트 조회
      */
     @Transactional(readOnly = true)
     public CartResponse getCartProducts(Pageable pageable/*, Long userId*/) {
@@ -70,5 +67,24 @@ public class CartService {
                 //cartId(cart.getId())
                 //.cartProducts(cartProducts)
                 .build();
+    }
+
+    /**
+     * 장바구니에 상품 단건 삭제
+     */
+    @Transactional
+    public Long deleteCartProduct(Long productId) {
+        //user 체크
+        //User user = getUser(userId);
+        //user에서 cart불러오기
+        //Cart cart = User.getCart();
+
+        CartProduct cartProduct = cartProductRepository.findByProductId(productId).orElseThrow(
+                () -> new IllegalArgumentException("해당 상품이 장바구니에 없습니다.")
+        );
+
+        //cart.removeCartProduct(cartProduct);
+
+        return cartProduct.getId();
     }
 }
