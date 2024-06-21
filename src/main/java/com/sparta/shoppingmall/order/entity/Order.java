@@ -19,8 +19,9 @@ public class Order extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userid;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "user_id")
+    //private User user;
 
     @Column(nullable = false)
     private String address;
@@ -33,8 +34,8 @@ public class Order extends Timestamped{
     private OrderStatus status = OrderStatus.PAYING;
 
     @Builder
-    public Order(Long userid, String address, int totalPrice) {
-        this.userid = userid;
+    public Order(/*User user,*/ String address, int totalPrice) {
+        /*this.user = user;*/
         this.address = address;
         this.totalPrice = totalPrice;
     }

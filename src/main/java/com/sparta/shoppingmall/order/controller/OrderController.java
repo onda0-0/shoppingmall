@@ -23,9 +23,9 @@ public class OrderController {
 
     //상품 주문
     @PostMapping
-    public ResponseEntity<CommonResponse<OrderResponseDto>> createOrder(@RequestParam Long userid,
-                                                      @RequestBody OrderRequestDto orderRequestDto) {
-        OrderResponseDto orderResponse = orderService.createOrder(userid, orderRequestDto);
+    public ResponseEntity<CommonResponse<OrderResponseDto>> createOrder(@RequestBody OrderRequestDto orderRequestDto/*,
+                                                                        @AuthenticationPrincipal UserDetailsImpl userDetails*/) {
+        OrderResponseDto orderResponse = orderService.createOrder(orderRequestDto/*, userDetails*/);
         CommonResponse<OrderResponseDto> response = CommonResponse.<OrderResponseDto>builder()
                 .statusCode(200)
                 .message("Order Success")
@@ -36,8 +36,8 @@ public class OrderController {
 
     //주문내역 조회
     @GetMapping
-    public ResponseEntity<CommonResponse<OrderListResponseDto>> getOrdersByUserId(@RequestParam Long userid) {
-        OrderListResponseDto orderlistResponse = orderService.getOrdersByUserId(userid);
+    public ResponseEntity<CommonResponse<OrderListResponseDto>> getOrdersByUserId(/*@AuthenticationPrincipal UserDetailsImpl userDetails*/) {
+        OrderListResponseDto orderlistResponse = orderService.getOrdersByUserId(/*userDetails*/);
         CommonResponse<OrderListResponseDto> response = CommonResponse.<OrderListResponseDto>builder()
                 .statusCode(200)
                 .message("Get Orders Success")
@@ -48,9 +48,9 @@ public class OrderController {
 
     //주문 취소
     @DeleteMapping("/{orderid}")
-    public ResponseEntity<CommonResponse<Long>> cancelOrder(@PathVariable Long orderid,
-                                              @RequestParam Long userid) {
-        boolean isCanceled = orderService.cancelOrder(orderid, userid);
+    public ResponseEntity<CommonResponse<Long>> cancelOrder(@PathVariable Long orderid/*,
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails*/) {
+        boolean isCanceled = orderService.cancelOrder(orderid/*, userDetails*/);
         if (isCanceled) {
             CommonResponse<Long> response = CommonResponse.<Long>builder()
                     .statusCode(200)

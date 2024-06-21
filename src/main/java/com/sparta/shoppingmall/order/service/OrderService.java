@@ -19,9 +19,9 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Transactional
-    public OrderResponseDto createOrder(Long userId, OrderRequestDto orderRequestDto) {
+    public OrderResponseDto createOrder(OrderRequestDto orderRequestDto/*, UserDetailsImpl userDetails*/) {
         Order order = Order.builder()
-                .userid(userId)
+                /*.user(userDetails.getUser())*/
                 .address(orderRequestDto.getAddress())
                 .totalPrice(orderRequestDto.getTotalPrice())
                 .build();
@@ -30,23 +30,23 @@ public class OrderService {
         return new OrderResponseDto(order);
     }
 
-    public OrderListResponseDto getOrdersByUserId(Long userid) {
-        List<Order> orders = orderRepository.findByUserid(userid);
+    public OrderListResponseDto getOrdersByUserId(/*UserDetailsImpl userDetails*/) {
+        List<Order> orders = orderRepository.findByUserid(1L/*userDetails.getUser().getId()*/);
         return new OrderListResponseDto(orders);
     }
 
     @Transactional
-    public boolean cancelOrder(Long orderid, Long userid) {
+    public boolean cancelOrder(Long orderid/*, UserDetailsImpl userDetails*/) {
         Optional<Order> orderOptional = orderRepository.findById(orderid);
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
-            if (order.getUserid().equals(userid)) {
+            /*if (order.getUser().getId().equals(userDetails.getUser().getId())) {
                 order.canceledStatus();
                 orderRepository.save(order);
                 return true;
             } else {
                 return false;
-            }
+            }*/
         }
         return false;
     }
