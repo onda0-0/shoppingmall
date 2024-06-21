@@ -8,14 +8,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Slf4j(topic = "JwtUtil")
+@Slf4j(topic = "JwtProvider")
 @Component
 public class JwtProvider {
 
@@ -69,7 +68,7 @@ public class JwtProvider {
     }
 
     // header에서 JWT 가져오기
-    public String getJwtFromHeader(HttpServletRequest request) {
+    public static String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (bearerToken != null && bearerToken.startsWith(BEAR)) {
             return bearerToken.substring(BEAR.length());
@@ -99,7 +98,7 @@ public class JwtProvider {
     // 토큰 검증 공통 로직
     private boolean validateTokenInternal(String token) {
         if (isTokenBlacklisted(token)) {
-            throw new IllegalArgumentException("이미 로그아웃된 토큰입니다.");
+            throw new IllegalArgumentException("이미 만료된 토큰입니다.");
         }
 
         try {
