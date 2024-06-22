@@ -3,10 +3,9 @@ spring:
     name: shoppingmall
 
 ---
-
 spring:
   datasource:
-    url: jdbc:mysql://${DB_URL}/shoppingmall
+    url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -16,7 +15,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         #show_sql: true
@@ -25,6 +24,7 @@ spring:
           CharSet: utf-8
           characterEncoding: utf-8
           useUnicode: true
+        dialect: org.hibernate.dialect.MySQLDialect
 
 logging.level:
   root: info

@@ -28,11 +28,12 @@ public class OrderGroup extends Timestamped {
     @Column(nullable = false)
     private OrderStatus status;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "orderGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Orders> orders = new ArrayList<>();
 
     //User와 매핑
-
+//    private User user;
+    private Long userId;
     /**
      * 생성자
      */
@@ -53,8 +54,8 @@ public class OrderGroup extends Timestamped {
     /**
      * List<Order>에 Order추가하기
      */
-    public void addOrder(Order order) {
-        this.orders.add(order);
+    public void addOrder(Orders orders) {
+        this.orders.add(orders);
     }
 
 }
