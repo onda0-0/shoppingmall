@@ -63,7 +63,7 @@ public class OrderGroupService {
      */
     @Transactional
     public Long cancelOrder(Long groupId/*, User user*/) {
-        OrderGroup orderGroup = orderGroupRepository.findByGroupId(1L/*groupId*/).orElseThrow(
+        OrderGroup orderGroup = orderGroupRepository.findById(1L/*groupId*/).orElseThrow(
                 () -> new IllegalArgumentException("해당 주문 내역이 존재하지 않습니다.")
         );
         orderGroup.updateStatus(OrderStatus.CANCELED);
