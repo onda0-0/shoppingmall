@@ -7,7 +7,7 @@ import lombok.Getter;
 public enum ProductStatus {
     ONSALE("Onsale"),//
     INPROGRESS("Inprogress"),
-    COMPLETEED("Completed");
+    COMPLETED("Completed");
 
     private final String status;
 

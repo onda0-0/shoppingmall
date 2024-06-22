@@ -1,6 +1,7 @@
 package com.sparta.shoppingmall.cart.entity;
 
 import com.sparta.shoppingmall.base.entity.Timestamped;
+import com.sparta.shoppingmall.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,9 +22,9 @@ public class CartProduct extends Timestamped {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "product_id")
-    //private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Builder
     public CartProduct(Cart cart/*, Product product*/) {

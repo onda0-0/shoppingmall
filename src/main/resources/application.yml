@@ -3,7 +3,6 @@ spring:
     name: shoppingmall
 
 ---
-
 spring:
   datasource:
     url: ${DB_URL}
@@ -25,6 +24,7 @@ spring:
           CharSet: utf-8
           characterEncoding: utf-8
           useUnicode: true
+        dialect: org.hibernate.dialect.MySQLDialect
 
 logging.level:
   root: info

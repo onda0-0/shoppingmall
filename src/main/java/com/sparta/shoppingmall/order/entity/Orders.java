@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "order")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Order extends Timestamped{
+public class Orders extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +28,7 @@ public class Order extends Timestamped{
     private OrderGroup orderGroup;
 
     @Builder
-    public Order(String productName, Long productPrice, OrderGroup orderGroup) {
+    public Orders(String productName, Long productPrice, OrderGroup orderGroup) {
         this.productName = productName;
         this.productPrice = productPrice;
         this.orderGroup = orderGroup;
