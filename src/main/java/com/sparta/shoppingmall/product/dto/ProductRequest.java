@@ -1,6 +1,5 @@
 package com.sparta.shoppingmall.product.dto;
 
-import com.sparta.shoppingmall.product.entity.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -12,6 +11,6 @@ public class ProductRequest {
     private String name;
 
     @NotNull(message = "상품 가격은 필수 값 입니다.")
-    private double price;
+    private Long price;
 
 }
