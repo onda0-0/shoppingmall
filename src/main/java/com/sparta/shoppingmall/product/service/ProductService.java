@@ -2,11 +2,13 @@ package com.sparta.shoppingmall.product.service;
 
 import com.sparta.shoppingmall.product.dto.ProductRequest;
 import com.sparta.shoppingmall.product.dto.ProductResponse;
-import com.sparta.shoppingmall.product.dto.ProductUpdateRequest;
 import com.sparta.shoppingmall.product.entity.Product;
 import com.sparta.shoppingmall.product.entity.ProductStatus;
 import com.sparta.shoppingmall.product.repository.ProductRepository;
+import com.sparta.shoppingmall.user.entity.User;
+import com.sparta.shoppingmall.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +20,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
+    private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
     /**
      * 상품등록
      */
-    public ProductResponse createProduct(ProductRequest productRequest) {
-        Product product = Product.builder()
+    public ProductResponse createProduct(ProductRequest productRequest, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다.")
+        );
 
-//                .user(user)
+        Product product = Product.builder()
+                .user(user)
                 .name(productRequest.getName())
                 .price(productRequest.getPrice())
                 .status(ProductStatus.ONSALE)
@@ -36,10 +42,10 @@ public class ProductService {
 
         return ProductResponse.builder()
                 .id(product.getId())
-
-                .name(productRequest.getName())
-                .price(productRequest.getPrice())
+                .name(product.getName())
+                .price(product.getPrice())
                 .status(product.getStatus())
+                .user(product.getUser())
                 .build();
     }
 
@@ -48,19 +54,18 @@ public class ProductService {
      * 상품조회(전체) get api/products
      */
     @Transactional(readOnly = true)
-    public List<ProductResponse> getProducts(Pageable pageable/*, Long userId*/) {
-        //user 체크
-        //User user = getUser(userId);
+    public List<ProductResponse> getProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAllByStatus(pageable, ProductStatus.ONSALE);
 
-        List<Product> products = productRepository.findAllByStatus(ProductStatus.ONSALE);
         List<ProductResponse> productResponses = new ArrayList<>();
+
         for (Product product : products) {
             ProductResponse productResponse = ProductResponse.builder()
                     .id(product.getId())
-                    //.user(product.getUser())
                     .name(product.getName())
                     .price(product.getPrice())
                     .status(product.getStatus())
+                    .user(product.getUser())
                     .build();
             productResponses.add(productResponse);
         }
@@ -75,14 +80,15 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse getProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new NullPointerException("Product with id " + productId + " not found")
+                () -> new IllegalArgumentException("해당 상품이 존재하지 않습니다.")
         );
+
         return ProductResponse.builder()
                 .id(product.getId())
-                //.user(product.getUser())
                 .name(product.getName())
                 .price(product.getPrice())
                 .status(product.getStatus())
+                .user(product.getUser())
                 .build();
     }
 
@@ -90,30 +96,22 @@ public class ProductService {
      * 상품수정 api/products/{productId}
      */
     @Transactional
-    public ProductResponse updateProduct(Long productId, ProductUpdateRequest productUpdateRequest) {
+    public ProductResponse updateProduct(Long productId, ProductRequest productRequest) {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new NullPointerException("Product with id " + productId + " not found")
         );
 
         product.update(
-                productUpdateRequest.getName(),
-                productUpdateRequest.getPrice(),
-                productUpdateRequest.getStatus()
+                productRequest.getName(),
+                productRequest.getPrice()
         );
-
-//        Product updatedProduct = product.builder()
-//                .name(productUpdateRequest.getName())
-//                .price(productUpdateRequest.getPrice())
-//                .status(productUpdateRequest.getStatus())
-//                .build();
-//        productRepository.save(updatedProduct);
 
         return ProductResponse.builder()
                 .id(product.getId())
-                //.user(product.getUser())
                 .name(product.getName())
                 .price(product.getPrice())
                 .status(product.getStatus())
+                .user(product.getUser())
                 .build();
     }
 
@@ -122,10 +120,14 @@ public class ProductService {
      * 상품삭제 delete  api/products
      */
     @Transactional
-    public void deleteProduct(Long productId) {
+    public Long deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() ->
-                new NullPointerException("Product with id " + productId + " not found"));
+                new IllegalArgumentException("해당 상품은 존재하지 않습니다.")
+        );
+
         productRepository.delete(product);
+
+        return product.getId();
     }
 
 }

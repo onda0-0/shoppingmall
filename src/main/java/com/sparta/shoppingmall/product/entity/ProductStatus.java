@@ -1,6 +1,5 @@
 package com.sparta.shoppingmall.product.entity;
 
-
 import lombok.Getter;
 
 @Getter
