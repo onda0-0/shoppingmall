@@ -1,11 +1,13 @@
 package com.sparta.shoppingmall.product.service;
 
+import com.sparta.shoppingmall.error.exception.UserMismatchException;
 import com.sparta.shoppingmall.product.dto.ProductRequest;
 import com.sparta.shoppingmall.product.dto.ProductResponse;
 import com.sparta.shoppingmall.product.entity.Product;
 import com.sparta.shoppingmall.product.entity.ProductStatus;
 import com.sparta.shoppingmall.product.repository.ProductRepository;
 import com.sparta.shoppingmall.user.entity.User;
+import com.sparta.shoppingmall.user.entity.UserType;
 import com.sparta.shoppingmall.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -96,16 +98,21 @@ public class ProductService {
      * 상품수정 api/products/{productId}
      */
     @Transactional
-    public ProductResponse updateProduct(Long productId, ProductRequest productRequest) {
+    public ProductResponse updateProduct(Long productId, ProductRequest productRequest, User user) {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new NullPointerException("Product with id " + productId + " not found")
         );
+
+        if(user.getUserType() != UserType.ADMIN){//유저일때가 아니라 관리자가 아닐때 로 적는게 맞음.
+            if(user.getId() != product.getUser().getId()){
+                throw new UserMismatchException("권한이 없는 사용자입니다");
+            }
+        }
 
         product.update(
                 productRequest.getName(),
                 productRequest.getPrice()
         );
-
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())

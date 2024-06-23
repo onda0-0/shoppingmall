@@ -88,10 +88,11 @@ public class ProductController {
     @PatchMapping("/{productId}")
     public ResponseEntity<CommonResponse<?>> updateProduct(
             @PathVariable Long productId,
-            @Valid @RequestBody ProductRequest productRequest
+            @Valid @RequestBody ProductRequest productRequest,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
         try{
-            ProductResponse response = productService.updateProduct(productId, productRequest);
+            ProductResponse response = productService.updateProduct(productId, productRequest, userDetails.getUser());
             return getResponseEntity(response, "상품 수정 성공");
         } catch (Exception e) {
             return getBadRequestResponseEntity(e);
