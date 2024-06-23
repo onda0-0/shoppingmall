@@ -1,6 +1,6 @@
 package com.sparta.shoppingmall.product.service;
 
-import com.sparta.shoppingmall.error.exception.UserMismatchException;
+import com.sparta.shoppingmall.exception.UserMismatchException;
 import com.sparta.shoppingmall.product.dto.ProductRequest;
 import com.sparta.shoppingmall.product.dto.ProductResponse;
 import com.sparta.shoppingmall.product.entity.Product;
@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -104,7 +105,7 @@ public class ProductService {
         );
 
         if(user.getUserType() != UserType.ADMIN){//유저일때가 아니라 관리자가 아닐때 로 적는게 맞음.
-            if(user.getId() != product.getUser().getId()){
+            if(!Objects.equals(user.getId(), product.getUser().getId())){
                 throw new UserMismatchException("권한이 없는 사용자입니다");
             }
         }
@@ -133,7 +134,7 @@ public class ProductService {
         );
 
         if(user.getUserType() != UserType.ADMIN){//유저일때가 아니라 관리자가 아닐때 로 적는게 맞음.
-            if(user.getId() != product.getUser().getId()){
+            if(!Objects.equals(user.getId(), product.getUser().getId())){
                 throw new UserMismatchException("권한이 없는 사용자입니다");
             }
         }
