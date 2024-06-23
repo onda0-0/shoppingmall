@@ -3,7 +3,6 @@ package com.sparta.shoppingmall.user.entity;
 import com.sparta.shoppingmall.base.entity.Timestamped;
 import com.sparta.shoppingmall.cart.entity.Cart;
 import com.sparta.shoppingmall.comment.entity.Comment;
-import com.sparta.shoppingmall.jwt.RefreshToken;
 import com.sparta.shoppingmall.like.entity.Likes;
 import com.sparta.shoppingmall.order.entity.OrderGroup;
 import com.sparta.shoppingmall.product.entity.Product;

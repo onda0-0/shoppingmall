@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -23,9 +26,7 @@ public class CommentService {
      */
     @Transactional
     public CommentResponse createComment(CommentRequest request, Long productId, User user) {
-        //해당 상품 조회
         Product product = productService.findByProductId(productId);
-        //상품에 댓글 생성
         Comment comment = new Comment(request, user, product);
 
         commentRepository.save(comment);
@@ -33,4 +34,18 @@ public class CommentService {
         return new CommentResponse(comment);
     }
 
+    /**
+     * 해당 상품의 댓글 전체 조회
+     */
+    public List<CommentResponse> getComments(Long productId) {
+        Product product = productService.findByProductId(productId);
+        List<Comment> comments = product.getComments();
+
+        List<CommentResponse> response = new ArrayList<>();
+        for(Comment comment : comments) {
+            response.add(new CommentResponse(comment));
+        }
+
+        return response;
+    }
 }

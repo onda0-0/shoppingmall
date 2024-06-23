@@ -12,6 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.sparta.shoppingmall.util.ControllerUtil.*;
 
 @RestController
@@ -37,6 +39,22 @@ public class CommentController {
         try{
             CommentResponse response = commentService.createComment(request, productId, userDetails.getUser());
             return getResponseEntity(response, "댓글 생성 실패");
+        } catch (Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
+    }
+
+    /**
+     * 해당 상품의 전체 댓글 조회
+     */
+    @GetMapping
+    public ResponseEntity<CommonResponse> getComments(
+            @PathVariable Long productId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        try{
+            List<CommentResponse> response = commentService.getComments(productId);
+            return getResponseEntity(response, "댓글 조회 성공");
         } catch (Exception e) {
             return getBadRequestResponseEntity(e);
         }
