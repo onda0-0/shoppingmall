@@ -1,6 +1,7 @@
 package com.sparta.shoppingmall.order.entity;
 
 import com.sparta.shoppingmall.base.entity.Timestamped;
+import com.sparta.shoppingmall.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,17 +32,19 @@ public class OrderGroup extends Timestamped {
     @OneToMany(mappedBy = "orderGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders = new ArrayList<>();
 
-    //User와 매핑
-//    private User user;
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     /**
      * 생성자
      */
     @Builder
-    public OrderGroup (String address, Long totalPrice, OrderStatus status) {
+    public OrderGroup (String address, Long totalPrice, OrderStatus status, User user) {
         this.address = address;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.user = user;
     }
 
     /**

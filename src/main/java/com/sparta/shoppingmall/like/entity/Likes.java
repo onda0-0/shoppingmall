@@ -2,6 +2,7 @@ package com.sparta.shoppingmall.like.entity;
 
 import com.sparta.shoppingmall.base.entity.Timestamped;
 import com.sparta.shoppingmall.like.dto.LikesRequest;
+import com.sparta.shoppingmall.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,9 +30,9 @@ public class Likes extends Timestamped {
     @Enumerated(EnumType.STRING)
     private LikeStatus status; // 좋아요 상태 [LIKED, CANCELED]
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "user_id")
-    //private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder
     public Likes(ContentType contenttype, Long contentId, LikeStatus status/*, User user*/) {

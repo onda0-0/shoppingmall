@@ -27,7 +27,7 @@ public class CartController {
      * 장바구니에 상품 단건 담기
      */
     @PostMapping
-    public ResponseEntity<CommonResponse<?>> creatCartProduct(
+    public ResponseEntity<CommonResponse> creatCartProduct(
             @Valid @RequestBody CartProductRequest cartProductRequest,
             //@AuthenticationPrincipal UserDetailsImpl userDetails,
             BindingResult bindingResult
@@ -47,7 +47,7 @@ public class CartController {
      * 장바구니에 상품 리스트 조회
      */
     @GetMapping
-    public ResponseEntity<CommonResponse<?>> getCartProducts(
+    public ResponseEntity<CommonResponse> getCartProducts(
             @PageableDefault(
                     size = 5,
                     sort = "createdAt",
@@ -67,7 +67,7 @@ public class CartController {
      * 장바구니에 상품 단건 삭제
      */
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<CommonResponse<?>> deleteCartProduct(
+    public ResponseEntity<CommonResponse> deleteCartProduct(
             @PathVariable Long productId
             //@AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
