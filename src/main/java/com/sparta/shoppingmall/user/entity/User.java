@@ -5,16 +5,13 @@ import com.sparta.shoppingmall.cart.entity.Cart;
 import com.sparta.shoppingmall.jwt.RefreshToken;
 import com.sparta.shoppingmall.like.entity.Likes;
 import com.sparta.shoppingmall.order.entity.OrderGroup;
-import com.sparta.shoppingmall.order.entity.Orders;
 import com.sparta.shoppingmall.product.entity.Product;
-import com.sparta.shoppingmall.user.dto.LoginRequestDTO;
 import com.sparta.shoppingmall.user.dto.SignupRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -80,13 +77,10 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RefreshToken> refreshTokens = new ArrayList<>();
-
     @Builder
     public User(String username, String password, String recentPassword, String recentPassword2, String recentPassword3,
                 String name, String email, String address, UserStatus userStatus,UserType userType ,LocalDateTime statusChangedAt,
-                List<Product> products, Cart cart, List<OrderGroup> orderGroups, List<Likes> likes, List<RefreshToken> refreshTokens) {
+                List<Product> products, Cart cart, List<OrderGroup> orderGroups, List<Likes> likes) {
         this.username = username;
         this.password = password;
         this.recentPassword = recentPassword;
@@ -102,7 +96,6 @@ public class User extends Timestamped {
         this.cart = cart;
         this.orderGroups = orderGroups;
         this.likes = likes;
-        this.refreshTokens =refreshTokens;
     }
 
     /**
