@@ -2,12 +2,10 @@ package com.sparta.shoppingmall.product.entity;
 
 import com.sparta.shoppingmall.base.entity.Timestamped;
 import com.sparta.shoppingmall.comment.entity.Comment;
+import com.sparta.shoppingmall.order.entity.OrderGroup;
 import com.sparta.shoppingmall.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +37,11 @@ public class Product extends Timestamped {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="order_group_id")
+    private OrderGroup orderGroup;
+
     /**
      * 생성자
      */
@@ -64,4 +67,12 @@ public class Product extends Timestamped {
     public void updateStatus(ProductStatus status) {
         this.status = status;
     }
+
+    /**
+     * 주문 정보 삽입
+     */
+    public void updateOrderGroup(OrderGroup orderGroup) {
+        this.orderGroup = orderGroup;
+    }
+
 }

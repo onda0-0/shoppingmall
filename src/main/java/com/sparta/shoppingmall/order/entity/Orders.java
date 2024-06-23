@@ -1,11 +1,9 @@
 package com.sparta.shoppingmall.order.entity;
 
 import com.sparta.shoppingmall.base.entity.Timestamped;
+import com.sparta.shoppingmall.product.entity.Product;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Getter
@@ -23,8 +21,9 @@ public class Orders extends Timestamped{
     @Column(nullable = false)
     private Long productPrice;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "order_group_id")
     private OrderGroup orderGroup;
 
     @Builder
@@ -33,16 +32,5 @@ public class Orders extends Timestamped{
         this.productPrice = productPrice;
         this.orderGroup = orderGroup;
     }
-
-    /**
-     * 주문 그룹생성 시 주문 생성
-     */
-//    public static Order createOrder(OrderGroup orderGroup/*, Product product*/) {
-//        return Order.builder()
-//                .productName(/*product.getName()*/)
-//                .productPricep(/*product.getPrice()*/)
-//                .orderGroup(orderGroup)
-//                .build();
-//    }
 
 }
