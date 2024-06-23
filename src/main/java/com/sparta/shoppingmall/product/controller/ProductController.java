@@ -30,7 +30,7 @@ public class ProductController {
      * 상품등록
      */
     @PostMapping
-    public ResponseEntity<CommonResponse<?>> createProduct(
+    public ResponseEntity<CommonResponse> createProduct(
             @Valid @RequestBody ProductRequest productRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             BindingResult bindingResult
@@ -50,7 +50,7 @@ public class ProductController {
      * 상품조회(전체) get api/products
      */
     @GetMapping
-    public ResponseEntity<CommonResponse<?>> getProducts(
+    public ResponseEntity<CommonResponse> getProducts(
             @PageableDefault(
                     size = 5,
                     sort = "createdAt",
@@ -70,7 +70,7 @@ public class ProductController {
      * 상품조회(단일)get api/products/{productId}
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<CommonResponse<?>> getProduct(
+    public ResponseEntity<CommonResponse> getProduct(
             @PathVariable Long productId
     ){
         try{
@@ -86,7 +86,7 @@ public class ProductController {
      * 상품수정 api/products/{productId}
      */
     @PatchMapping("/{productId}")
-    public ResponseEntity<CommonResponse<?>> updateProduct(
+    public ResponseEntity<CommonResponse> updateProduct(
             @PathVariable Long productId,
             @Valid @RequestBody ProductRequest productRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -103,7 +103,7 @@ public class ProductController {
      * 상품삭제 delete  api/products
      */
     @DeleteMapping("/{productId}")
-    public ResponseEntity<CommonResponse<?>> deleteProduct(
+    public ResponseEntity<CommonResponse> deleteProduct(
             @PathVariable Long productId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){

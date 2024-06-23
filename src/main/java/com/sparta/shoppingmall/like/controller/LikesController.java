@@ -20,7 +20,7 @@ public class LikesController {
     private final LikesService likesService;
 
     @PostMapping("/products/{productId}/like")
-    public ResponseEntity<CommonResponse<?>> toggleProductLike (
+    public ResponseEntity<CommonResponse> toggleProductLike (
             @PathVariable Long productId,
             @Valid @RequestBody LikesRequest request,
             BindingResult bindingResult
