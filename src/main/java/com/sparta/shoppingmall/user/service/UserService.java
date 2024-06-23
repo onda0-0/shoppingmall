@@ -1,9 +1,6 @@
 package com.sparta.shoppingmall.user.service;
 
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
 import com.sparta.shoppingmall.jwt.JwtProvider;
 import com.sparta.shoppingmall.jwt.RefreshTokenService;
 import com.sparta.shoppingmall.user.dto.*;
@@ -12,14 +9,14 @@ import com.sparta.shoppingmall.user.entity.UserStatus;
 import com.sparta.shoppingmall.user.entity.UserType;
 import com.sparta.shoppingmall.user.exception.UserException;
 import com.sparta.shoppingmall.user.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
 
-import static com.sparta.shoppingmall.jwt.JwtProvider.AUTHORIZATION_HEADER;
-import static com.sparta.shoppingmall.jwt.JwtProvider.REFRESH_HEADER;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +25,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final JwtProvider jwtProvider;
 
     private final RefreshTokenService refreshTokenService;
 
@@ -74,7 +69,7 @@ public class UserService {
     /**
      * 4. 로그아웃
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Long logout(Long userId) {
         //사용자 조회
         User user = userRepository.findById(userId).orElseThrow(

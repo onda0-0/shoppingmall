@@ -25,7 +25,7 @@ public class RefreshTokenService {
         if (existToken.isPresent()) {
             existToken.get().update(refreshToken);
         } else {
-            refreshTokenRepository.save(new RefreshToken(refreshToken, user.getUsername()));
+            refreshTokenRepository.save(new RefreshToken(user.getUsername(), refreshToken));
         }
     }
 

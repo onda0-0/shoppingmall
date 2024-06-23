@@ -4,7 +4,6 @@ import com.sparta.shoppingmall.base.dto.CommonResponse;
 import com.sparta.shoppingmall.security.UserDetailsImpl;
 import com.sparta.shoppingmall.user.dto.*;
 import com.sparta.shoppingmall.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +53,7 @@ public class UserController {
         }
         try {
             Long response = userService.withdrawUser(requestDTO, userDetails.getUser());
-            return getResponseEntity(response, "회원가입 성공");
+            return getResponseEntity(response, "회원탈퇴 성공");
         } catch (Exception e) {
             return getBadRequestResponseEntity(e);
         }
