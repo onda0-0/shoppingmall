@@ -1,7 +1,6 @@
 package com.sparta.shoppingmall.user.service;
 
 
-import com.sparta.shoppingmall.jwt.JwtProvider;
 import com.sparta.shoppingmall.jwt.RefreshTokenService;
 import com.sparta.shoppingmall.user.dto.*;
 import com.sparta.shoppingmall.user.entity.User;
