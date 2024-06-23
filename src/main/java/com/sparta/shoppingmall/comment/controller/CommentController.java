@@ -4,7 +4,6 @@ import com.sparta.shoppingmall.base.dto.CommonResponse;
 import com.sparta.shoppingmall.comment.dto.CommentRequest;
 import com.sparta.shoppingmall.comment.dto.CommentResponse;
 import com.sparta.shoppingmall.comment.service.CommentService;
-import com.sparta.shoppingmall.product.dto.ProductResponse;
 import com.sparta.shoppingmall.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
