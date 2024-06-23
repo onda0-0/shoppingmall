@@ -94,7 +94,7 @@ public class UserController {
     /**
      * 로그인한 사용자 프로필 수정
      */
-    @PatchMapping("{userId}/profiles")
+    @PatchMapping("/{userId}/profiles")
     public ResponseEntity<CommonResponse> updateProfile(
             @PathVariable Long userId,
             @Valid @RequestBody EditProfileRequestDTO request,

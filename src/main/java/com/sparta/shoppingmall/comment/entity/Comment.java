@@ -82,4 +82,18 @@ public class Comment extends Timestamped {
         }
     }
 
+    /**
+     * 좋아요 수 증가
+     */
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    /**
+     * 좋아요 수 감소
+     */
+    public void decreaseLikeCount() {
+        this.likeCount--;
+    }
+
 }

@@ -6,6 +6,7 @@ import com.sparta.shoppingmall.order.entity.OrderGroup;
 import com.sparta.shoppingmall.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,10 @@ public class Product extends Timestamped {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductStatus status; //상태
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private int likeCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -73,6 +78,21 @@ public class Product extends Timestamped {
      */
     public void updateOrderGroup(OrderGroup orderGroup) {
         this.orderGroup = orderGroup;
+    }
+
+
+    /**
+     * 좋아요 갯수 증가
+     */
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    /**
+     * 좋아요 갯수 감소
+     */
+    public void decreaseLikeCount() {
+        this.likeCount--;
     }
 
 }
