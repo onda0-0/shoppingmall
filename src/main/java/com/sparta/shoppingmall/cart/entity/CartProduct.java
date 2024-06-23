@@ -2,6 +2,7 @@ package com.sparta.shoppingmall.cart.entity;
 
 import com.sparta.shoppingmall.base.entity.Timestamped;
 import com.sparta.shoppingmall.product.entity.Product;
+import com.sparta.shoppingmall.product.entity.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,21 +28,33 @@ public class CartProduct extends Timestamped {
     private Product product;
 
     @Builder
-    public CartProduct(Cart cart/*, Product product*/) {
+    public CartProduct(Cart cart, Product product) {
         this.cart = cart;
-        //this.product = product;
+        this.product = product;
+        this.cart.addCartProduct(this);
     }
 
     /**
      * CartProduct 생성
      */
-    public static CartProduct createCartProduct(Cart cart/*, Product product*/) {
-
-        return CartProduct.builder()
-                .cart(cart)
-                //.product(product)
-                .build();
+    public static CartProduct createCartProduct(Cart cart, Product product) {
+        return new CartProduct(cart, product);
     }
 
+    /**
+     * 중복된 상품 체크
+     */
+    public void verifyCartProduct(Long productId) {
+        if(productId.equals(this.product.getId())){
+            throw new IllegalArgumentException("중복된 상품이 존재합니다.");
+        }
+    }
+
+    /**
+     * 상품 상태 확인
+     */
+    public boolean checkProductStatus() {
+        return ProductStatus.ONSALE.equals(product.getStatus());
+    }
 
 }

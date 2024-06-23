@@ -38,7 +38,10 @@ public class OrderGroupService {
         List<Product> productList = new ArrayList<>();
         for(Long productId : productIdList){
             Product product = productService.findByProductId(productId);
-            productList.add(product);
+            //상품이 판매중 상태일 때만 주문
+            if(ProductStatus.ONSALE.equals(product.getStatus())){
+                productList.add(product);
+            }
         }
 
         //주문시 OrderGroup 생성
