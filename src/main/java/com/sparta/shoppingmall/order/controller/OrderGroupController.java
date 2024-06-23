@@ -25,7 +25,7 @@ public class OrderGroupController {
      * 상품 주문
      */
     @PostMapping
-    public ResponseEntity<CommonResponse<?>> createOrder(
+    public ResponseEntity<CommonResponse> createOrder(
             @RequestBody OrderGroupRequestDto orderGroupRequestDto,
             BindingResult bindingResult
             /*,@AuthenticationPrincipal UserDetailsImpl userDetails*/
@@ -45,7 +45,7 @@ public class OrderGroupController {
      * 주문 내역 조회
      */
     @GetMapping
-    public ResponseEntity<CommonResponse<?>> getOrderGroups(
+    public ResponseEntity<CommonResponse> getOrderGroups(
             /*@AuthenticationPrincipal UserDetailsImpl userDetails*/
     ) {
         try {
@@ -60,7 +60,7 @@ public class OrderGroupController {
      * 주문 취소
      */
     @PutMapping("/{groupId}")
-    public ResponseEntity<CommonResponse<?>> cancelOrder(
+    public ResponseEntity<CommonResponse> cancelOrder(
             @PathVariable Long groupId
             /*,@AuthenticationPrincipal UserDetailsImpl userDetails*/
     ) {

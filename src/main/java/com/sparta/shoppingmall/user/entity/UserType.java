@@ -15,7 +15,7 @@ public enum UserType {
             case ADMIN:
                 return "ROLE_ADMIN"; // 관리자
             default:
-                return null; // 해당 안될경우 null 처리
+                throw new IllegalArgumentException("해당 권한은 존재하지 않습니다.");
         }
     }
 }

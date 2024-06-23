@@ -1,5 +1,6 @@
 package com.sparta.shoppingmall.cart.entity;
 
+import com.sparta.shoppingmall.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,13 +23,14 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CartProduct> cartProducts = new ArrayList<>();
 
-    //@OneToOne()
-    //private User user;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
 
     @Builder
-    public Cart (/*User user, */List<CartProduct> cartProducts) {
-        //this.user = user;
+    public Cart (List<CartProduct> cartProducts, User user) {
         this.cartProducts = cartProducts;
+        this.user = user;
     }
 
     /**
@@ -48,10 +50,17 @@ public class Cart {
     /**
      * 사용자 생성 시 장바구니 동시 생성
      */
-    public static Cart createCart(/*User user*/) {
+    public static Cart createCart(User user) {
         Cart cart = new Cart();
-        //cart.setUser(user);
+        cart.setUser(user);
         return cart;
+    }
+
+    /**
+     * 장바구니에 사용자 설정
+     */
+    private void setUser(User user) {
+        this.user = user;
     }
 
 }
