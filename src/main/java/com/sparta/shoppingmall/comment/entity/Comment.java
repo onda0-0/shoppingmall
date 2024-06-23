@@ -65,9 +65,18 @@ public class Comment extends Timestamped {
     }
 
     /**
+     * 해당 사용자 확인
+     */
+    public void verifyCommentUser(Long userId) {
+        if(!this.user.getId().equals(userId)){
+            throw new IllegalArgumentException("해당 사용자의 댓글이 아닙니다.");
+        }
+    }
+
+    /**
      * 해당 상품 확인
      */
-    public void verifyProduct(Long productId) {
+    public void verifyCommentProduct(Long productId) {
         if (!this.product.getId().equals(productId)) {
             throw new IllegalArgumentException("해당 상품의 댓글이 아닙니다.");
         }

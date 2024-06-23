@@ -75,8 +75,25 @@ public class CommentController {
             return getFieldErrorResponseEntity(bindingResult, "댓글 수정 실패");
         }
         try{
-            CommentResponse response = commentService.updateComments(request, productId, commentId);
+            CommentResponse response = commentService.updateComments(request, productId, commentId, userDetails.getUser());
             return getResponseEntity(response, "댓글 수정 성공");
+        } catch (Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
+    }
+
+    /**
+     * 댓글 삭제
+     */
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<CommonResponse> deleteComment(
+            @PathVariable Long productId,
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        try{
+            Long response = commentService.deleteComment(productId, commentId, userDetails.getUser());
+            return getResponseEntity(response, "댓글 삭제 성공");
         } catch (Exception e) {
             return getBadRequestResponseEntity(e);
         }
