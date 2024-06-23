@@ -104,10 +104,11 @@ public class ProductController {
      */
     @DeleteMapping("/{productId}")
     public ResponseEntity<CommonResponse<?>> deleteProduct(
-            @PathVariable Long productId
+            @PathVariable Long productId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
         try{
-            Long response = productService.deleteProduct(productId);
+            Long response = productService.deleteProduct(productId, userDetails.getUser());
             return getResponseEntity(response, "상품 삭제 성공");
         } catch (Exception e) {
             return getBadRequestResponseEntity(e);

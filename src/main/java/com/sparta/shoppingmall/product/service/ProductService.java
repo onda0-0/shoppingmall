@@ -127,10 +127,16 @@ public class ProductService {
      * 상품삭제 delete  api/products
      */
     @Transactional
-    public Long deleteProduct(Long productId) {
+    public Long deleteProduct(Long productId, User user) {
         Product product = productRepository.findById(productId).orElseThrow(() ->
                 new IllegalArgumentException("해당 상품은 존재하지 않습니다.")
         );
+
+        if(user.getUserType() != UserType.ADMIN){//유저일때가 아니라 관리자가 아닐때 로 적는게 맞음.
+            if(user.getId() != product.getUser().getId()){
+                throw new UserMismatchException("권한이 없는 사용자입니다");
+            }
+        }
 
         productRepository.delete(product);
 
