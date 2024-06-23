@@ -37,6 +37,7 @@ public class CommentService {
     /**
      * 해당 상품의 댓글 전체 조회
      */
+    @Transactional(readOnly = true)
     public List<CommentResponse> getComments(Long productId) {
         Product product = productService.findByProductId(productId);
         List<Comment> comments = product.getComments();
@@ -48,4 +49,18 @@ public class CommentService {
 
         return response;
     }
+
+    /**
+     * 댓글 수정
+     */
+    @Transactional
+    public CommentResponse updateComments(CommentRequest request, Long productId, Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new IllegalArgumentException("해당 댓글은 존재하지 않습니다.")
+        );
+        comment.verifyProduct(productId);
+
+        return new CommentResponse(comment);
+    }
+
 }

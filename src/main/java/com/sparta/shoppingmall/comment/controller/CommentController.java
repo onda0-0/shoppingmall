@@ -60,4 +60,26 @@ public class CommentController {
         }
     }
 
+    /**
+     * 댓글 수정
+     */
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<CommonResponse> updateComment(
+            @PathVariable Long productId,
+            @PathVariable Long commentId,
+            @Valid @RequestBody CommentRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            BindingResult bindingResult
+    ){
+        if(bindingResult.hasErrors()){
+            return getFieldErrorResponseEntity(bindingResult, "댓글 수정 실패");
+        }
+        try{
+            CommentResponse response = commentService.updateComments(request, productId, commentId);
+            return getResponseEntity(response, "댓글 수정 성공");
+        } catch (Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
+    }
+
 }

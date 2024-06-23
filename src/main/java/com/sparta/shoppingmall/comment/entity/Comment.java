@@ -60,9 +60,17 @@ public class Comment extends Timestamped {
     /**
      * 댓글 수정
      */
-    @Builder
     public void updateComment(CommentRequest request) {
         this.content = request.getContent();
+    }
+
+    /**
+     * 해당 상품 확인
+     */
+    public void verifyProduct(Long productId) {
+        if (!this.product.getId().equals(productId)) {
+            throw new IllegalArgumentException("해당 상품의 댓글이 아닙니다.");
+        }
     }
 
 }
