@@ -52,7 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         log.info("Refresh Token 검증 성공 && Access Token 재생성");
 
                         Claims info = jwtProvider.getUsernameFromClaims(refreshToken);
-                        String newAccessToken = jwtProvider.createAccessToken(info.getSubject(), info.get(AUTHORIZATION_KEY, UserType.class));
+                        String newAccessToken = jwtProvider.createToken(info.getSubject(), TOKEN_TIME, info.get(AUTHORIZATION_KEY, UserType.class));
                         res.setHeader(AUTHORIZATION_HEADER, newAccessToken);
                         setAuthentication(info.getSubject());
 
