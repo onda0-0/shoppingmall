@@ -37,4 +37,22 @@ public class FollowsService {
         return new FollowsResponse(follow);
     }
 
+    /**
+     * 팔로우 취소
+     */
+    public FollowsResponse followCancel(Long followingId, User follower) {
+        // 검증 -> 팔로우 검색 -> 팔로우 삭제
+        if(followingId.equals(follower.getId())){
+            throw new IllegalArgumentException("자신을 팔로우 취소할 수 없습니다.");
+        }
+
+        Optional<Follows> chekcFollow = followsRepository.findByFollowingIdAndFollowerId(followingId, follower.getId());
+        if(chekcFollow.isEmpty()){
+            throw new IllegalArgumentException("이미 팔로우가 취소된 사용자 입니다.");
+        }
+
+        followsRepository.delete(chekcFollow.get());
+
+        return new FollowsResponse(chekcFollow.get());
+    }
 }

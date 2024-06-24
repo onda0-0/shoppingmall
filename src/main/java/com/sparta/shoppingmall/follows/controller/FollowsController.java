@@ -7,10 +7,7 @@ import com.sparta.shoppingmall.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.sparta.shoppingmall.util.ControllerUtil.getBadRequestResponseEntity;
 import static com.sparta.shoppingmall.util.ControllerUtil.getResponseEntity;
@@ -26,7 +23,7 @@ public class FollowsController {
      * 사용자 follow
      */
     @PostMapping("/{followingId}")
-    public ResponseEntity<CommonResponse> followToggleUser(
+    public ResponseEntity<CommonResponse> followUser(
             @PathVariable Long followingId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -36,6 +33,23 @@ public class FollowsController {
         } catch (Exception e) {
             return getBadRequestResponseEntity(e);
         }
+    }
+
+    /**
+     * follow 취소
+     */
+    @DeleteMapping("/{followingId}")
+    public ResponseEntity<CommonResponse> followCancel(
+            @PathVariable Long followingId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        try{
+            FollowsResponse response = followsService.followCancel(followingId, userDetails.getUser());
+            return getResponseEntity(response, "팔로우 취소 성공");
+        } catch(Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
+
     }
 
 }
