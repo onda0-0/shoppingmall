@@ -53,7 +53,7 @@ public class ProductController {
     public ResponseEntity<CommonResponse> getProducts(
             @PageableDefault(
                     size = 5,
-                    sort = "createdAt",
+                    sort = "createAt",
                     direction = Sort.Direction.DESC
             ) Pageable pageable
     ) {
