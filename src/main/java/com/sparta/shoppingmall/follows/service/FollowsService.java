@@ -96,6 +96,7 @@ public class FollowsService {
     /**
      * 관리자의 팔로우 취소
      */
+    @Transactional
     public FollowsResponse followCancelAdmin(Long followerId, Long followingId) {
         //사용자가 존재하는지 확인용
         User follower = userService.findById(followerId);
@@ -106,5 +107,37 @@ public class FollowsService {
         );
 
         return new FollowsResponse(follow);
+    }
+
+    /**
+     * 관리자 - 해당 사용자 팔로잉 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public List<FollowsResponse> getFollowingsAdmin(Long followerId) {
+        User follower = userService.findById(followerId);
+
+        List<Follows> followings = follower.getFollowings();
+        List<FollowsResponse> response = new ArrayList<>();
+        for (Follows follows : followings) {
+            response.add(new FollowsResponse(follows));
+        }
+
+        return response;
+    }
+
+    /**
+     * 관리자 - 해당 사용자의 팔로워 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public List<FollowsResponse> getFollowersAdmin(Long followingId) {
+        User following = userService.findById(followingId);
+
+        List<Follows> followers = following.getFollowers();
+        List<FollowsResponse> response = new ArrayList<>();
+        for (Follows follows : followers) {
+            response.add(new FollowsResponse(follows));
+        }
+
+        return response;
     }
 }

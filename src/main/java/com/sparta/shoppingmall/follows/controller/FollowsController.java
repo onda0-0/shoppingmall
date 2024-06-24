@@ -57,7 +57,7 @@ public class FollowsController {
     /**
      * following 목록 조회
      */
-    @GetMapping
+    @GetMapping("/followings")
     public ResponseEntity<CommonResponse> getFollowings(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -72,7 +72,7 @@ public class FollowsController {
     /**
      * follower 목록 조회
      */
-    @GetMapping
+    @GetMapping("/followers")
     public ResponseEntity<CommonResponse> getFollowers(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -90,13 +90,45 @@ public class FollowsController {
     @Secured("ADMIN")
     @DeleteMapping("/{followerId}/{followingId}")
     public ResponseEntity<CommonResponse> followCancelAdmin(
-            @PathVariable Long followerId,
-            @PathVariable Long followingId,
+            @PathVariable(name = "followerId") Long followerId,
+            @PathVariable(name = "followingId") Long followingId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         try{
             FollowsResponse response = followsService.followCancelAdmin(followerId, followingId);
             return getResponseEntity(response, "해당 사용자의 팔로우 취소 성공");
+        } catch(Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
+    }
+
+    /**
+     * 관리자 - 해당 사용자의 팔로잉 목록 조회
+     */
+    @Secured("ADMIN")
+    @GetMapping("/{followerId}")
+    public ResponseEntity<CommonResponse> getFollowingsAdmin(
+            @PathVariable Long followerId
+    ) {
+        try{
+            List<FollowsResponse> response = followsService.getFollowingsAdmin(followerId);
+            return getResponseEntity(response, "해당 사용자의 팔로잉 목록 조회 성공");
+        } catch(Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
+    }
+
+    /**
+     * 관리자 - 해당 사용자의 팔로워 목록 조회
+     */
+    @Secured("ADMIN")
+    @GetMapping("/{followingId}")
+    public ResponseEntity<CommonResponse> getFollowersAdmin(
+            @PathVariable Long followingId
+    ) {
+        try{
+            List<FollowsResponse> response = followsService.getFollowersAdmin(followingId);
+            return getResponseEntity(response, "해당 사용자의 팔로워 목록 조회 성공");
         } catch(Exception e) {
             return getBadRequestResponseEntity(e);
         }
