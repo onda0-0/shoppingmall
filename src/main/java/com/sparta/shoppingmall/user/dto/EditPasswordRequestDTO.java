@@ -1,16 +1,10 @@
 package com.sparta.shoppingmall.user.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class EditPasswordRequestDTO {
 
     @NotBlank(message = "현재 비밀번호를 입력해주세요.")

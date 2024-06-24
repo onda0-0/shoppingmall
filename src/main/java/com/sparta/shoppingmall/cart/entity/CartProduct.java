@@ -50,11 +50,4 @@ public class CartProduct extends Timestamped {
         }
     }
 
-    /**
-     * 상품 상태 확인
-     */
-    public boolean checkProductStatus() {
-        return ProductStatus.ONSALE.equals(product.getStatus());
-    }
-
 }
