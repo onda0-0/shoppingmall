@@ -8,7 +8,6 @@ import com.sparta.shoppingmall.cart.entity.CartProduct;
 import com.sparta.shoppingmall.cart.repository.CartProductRepository;
 import com.sparta.shoppingmall.cart.repository.CartRepository;
 import com.sparta.shoppingmall.product.entity.Product;
-import com.sparta.shoppingmall.product.entity.ProductStatus;
 import com.sparta.shoppingmall.product.service.ProductService;
 import com.sparta.shoppingmall.user.entity.User;
 import lombok.RequiredArgsConstructor;
