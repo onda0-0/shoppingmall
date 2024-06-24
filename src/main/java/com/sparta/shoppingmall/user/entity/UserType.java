@@ -1,8 +1,5 @@
 package com.sparta.shoppingmall.user.entity;
 
-import jakarta.persistence.Column;
-
-
 public enum UserType {
 
     USER, // 일반 사용자

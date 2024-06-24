@@ -39,7 +39,7 @@ public class UserService {
 
         //비밀번호 암호화
         String password = passwordEncoder.encode(request.getPassword());
-        User user = new User(request, password, UserType.USER, UserStatus.JOIN, LocalDateTime.now());
+        User user = new User(request, password, request.getUserType(), UserStatus.JOIN, LocalDateTime.now());
 
         userRepository.save(user);
 

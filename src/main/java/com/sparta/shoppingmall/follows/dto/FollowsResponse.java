@@ -8,13 +8,13 @@ import lombok.Getter;
 public class FollowsResponse {
 
     private final Long id;
-    private final User follower;
-    private final User following;
+    private final Long followerId;
+    private final Long followingId;
 
     public FollowsResponse(Follows follows) {
         this.id = follows.getId();
-        this.follower = follows.getFollower();
-        this.following = follows.getFollowing();
+        this.followerId = follows.getFollower().getId();
+        this.followingId = follows.getFollowing().getId();
     }
 
 }

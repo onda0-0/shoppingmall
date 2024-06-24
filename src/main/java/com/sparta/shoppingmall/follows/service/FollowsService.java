@@ -66,11 +66,11 @@ public class FollowsService {
     }
 
     /**
-     * 사용자가 팔로우 하는 전체 목록 조회
+     * 사용자를 팔로우 하는 전체 목록 조회
      */
     @Transactional(readOnly = true)
     public List<FollowsResponse> getFollowings(User user) {
-        List<Follows> followings = user.getFollowings();
+        List<Follows> followings = userService.findById(user.getId()).getFollowings();
         List<FollowsResponse> response = new ArrayList<>();
         for (Follows follows : followings) {
             response.add(new FollowsResponse(follows));
@@ -80,11 +80,11 @@ public class FollowsService {
     }
 
     /**
-     * 사용자를 팔로우 하는 전체 목록 조회
+     * 사용자가 팔로우 하는 전체 목록 조회
      */
     @Transactional(readOnly = true)
     public List<FollowsResponse> getFollowers(User user) {
-        List<Follows> followers = user.getFollowers();
+        List<Follows> followers = userService.findById(user.getId()).getFollowers();    // 안좋은거 -> 내가 팔로우 하고 있는 사람
         List<FollowsResponse> response = new ArrayList<>();
         for (Follows follows : followers) {
             response.add(new FollowsResponse(follows));

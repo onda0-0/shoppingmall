@@ -29,7 +29,7 @@ Content-Type: application/json
 }
 
 ### 전체 상품 조회 -> ok
-GET http://localhost:8080/api/products
+GET http://localhost:8080/api/products?page=1
 
 
 ### 상품 단일 조회 -> ok

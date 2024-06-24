@@ -48,9 +48,7 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<CommonResponse> getProducts(
-
             @RequestParam int page
-
     ) {
         try{
             List<ProductResponse> response = productService.getProducts(page);
