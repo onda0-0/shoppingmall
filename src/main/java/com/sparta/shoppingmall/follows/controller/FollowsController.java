@@ -6,6 +6,7 @@ import com.sparta.shoppingmall.follows.service.FollowsService;
 import com.sparta.shoppingmall.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -78,6 +79,24 @@ public class FollowsController {
         try{
             List<FollowsResponse> response = followsService.getFollowers(userDetails.getUser());
             return getResponseEntity(response, "팔로워 목록 조회 성공");
+        } catch(Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
+    }
+
+    /**
+     * 관리자 - follow 취소
+     */
+    @Secured("ADMIN")
+    @DeleteMapping("/{followerId}/{followingId}")
+    public ResponseEntity<CommonResponse> followCancelAdmin(
+            @PathVariable Long followerId,
+            @PathVariable Long followingId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        try{
+            FollowsResponse response = followsService.followCancelAdmin(followerId, followingId);
+            return getResponseEntity(response, "해당 사용자의 팔로우 취소 성공");
         } catch(Exception e) {
             return getBadRequestResponseEntity(e);
         }

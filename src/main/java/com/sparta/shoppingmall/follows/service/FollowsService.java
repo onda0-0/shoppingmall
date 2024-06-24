@@ -4,6 +4,7 @@ import com.sparta.shoppingmall.follows.dto.FollowsResponse;
 import com.sparta.shoppingmall.follows.entity.Follows;
 import com.sparta.shoppingmall.follows.repository.FollowsRepository;
 import com.sparta.shoppingmall.user.entity.User;
+import com.sparta.shoppingmall.user.entity.UserStatus;
 import com.sparta.shoppingmall.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public class FollowsService {
         }
 
         User following = userService.findById(followingId);
+        if(UserStatus.WITHDRAW.equals(following.getUserStatus())){
+            throw new IllegalArgumentException("이미 탈퇴한 사용자는 팔로우할 수 없습니다.");
+        }
         Follows follow = new Follows(follower, following);
         followsRepository.save(follow);
 
@@ -87,5 +91,20 @@ public class FollowsService {
         }
 
         return response;
+    }
+
+    /**
+     * 관리자의 팔로우 취소
+     */
+    public FollowsResponse followCancelAdmin(Long followerId, Long followingId) {
+        //사용자가 존재하는지 확인용
+        User follower = userService.findById(followerId);
+        User following = userService.findById(followingId);
+
+        Follows follow = followsRepository.findByFollowingIdAndFollowerId(followingId, followerId).orElseThrow(
+                () -> new IllegalArgumentException("해당 팔로우는 이미 취소된 팔로우입니다.")
+        );
+
+        return new FollowsResponse(follow);
     }
 }
