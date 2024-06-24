@@ -3,9 +3,11 @@ package com.sparta.shoppingmall.user.entity;
 import com.sparta.shoppingmall.base.entity.Timestamped;
 import com.sparta.shoppingmall.cart.entity.Cart;
 import com.sparta.shoppingmall.comment.entity.Comment;
+import com.sparta.shoppingmall.follows.entity.Follows;
 import com.sparta.shoppingmall.like.entity.Likes;
 import com.sparta.shoppingmall.order.entity.OrderGroup;
 import com.sparta.shoppingmall.product.entity.Product;
+import com.sparta.shoppingmall.user.dto.AdminUpdateUserRequest;
 import com.sparta.shoppingmall.user.dto.SignupRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -77,10 +79,17 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follows> followings;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follows> followers;
+
     @Builder
     public User(String username, String password, String recentPassword, String recentPassword2, String recentPassword3,
                 String name, String email, String address, UserStatus userStatus,UserType userType ,LocalDateTime statusChangedAt,
-                List<Product> products, Cart cart, List<OrderGroup> orderGroups, List<Likes> likes) {
+                List<Product> products, Cart cart, List<OrderGroup> orderGroups, List<Likes> likes,
+                List<Follows> followers, List<Follows> followings) {
         this.username = username;
         this.password = password;
         this.recentPassword = recentPassword;
@@ -96,6 +105,8 @@ public class User extends Timestamped {
         this.cart = cart;
         this.orderGroups = orderGroups;
         this.likes = likes;
+        this.followers = followers;
+        this.followings = followings;
     }
 
     /**
@@ -139,4 +150,19 @@ public class User extends Timestamped {
         this.userStatus = status;
     }
 
+    /**
+     * 관리자 - 회원 정보 수정
+     */
+    public void adminUpdateUser(AdminUpdateUserRequest request) {
+        this.username = request.getUsername();
+        this.password = request.getPassword();
+        this.recentPassword = request.getRecentPassword();
+        this.recentPassword2 = request.getRecentPassword2();
+        this.recentPassword3 = request.getRecentPassword3();
+        this.name = request.getName();
+        this.email = request.getEmail();
+        this.address = request.getAddress();
+        this.userType = request.getUserType();
+        this.userStatus = request.getUserStatus();
+    }
 }
