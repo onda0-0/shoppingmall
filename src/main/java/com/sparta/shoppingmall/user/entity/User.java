@@ -80,15 +80,16 @@ public class User extends Timestamped {
     private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Follows> followers;
+    private List<Follows> followings;
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Follows> followings;
+    private List<Follows> followers;
 
     @Builder
     public User(String username, String password, String recentPassword, String recentPassword2, String recentPassword3,
                 String name, String email, String address, UserStatus userStatus,UserType userType ,LocalDateTime statusChangedAt,
-                List<Product> products, Cart cart, List<OrderGroup> orderGroups, List<Likes> likes) {
+                List<Product> products, Cart cart, List<OrderGroup> orderGroups, List<Likes> likes,
+                List<Follows> followers, List<Follows> followings) {
         this.username = username;
         this.password = password;
         this.recentPassword = recentPassword;
@@ -104,6 +105,8 @@ public class User extends Timestamped {
         this.cart = cart;
         this.orderGroups = orderGroups;
         this.likes = likes;
+        this.followers = followers;
+        this.followings = followings;
     }
 
     /**

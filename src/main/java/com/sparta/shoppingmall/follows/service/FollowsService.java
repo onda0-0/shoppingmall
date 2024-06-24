@@ -7,7 +7,10 @@ import com.sparta.shoppingmall.user.entity.User;
 import com.sparta.shoppingmall.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +23,7 @@ public class FollowsService {
     /**
      * 팔로우
      */
+    @Transactional
     public FollowsResponse followUser(Long followingId, User follower) {
         if(followingId.equals(follower.getId())){
             throw new IllegalArgumentException("자신을 팔로우 할 수 없습니다.");
@@ -40,6 +44,7 @@ public class FollowsService {
     /**
      * 팔로우 취소
      */
+    @Transactional
     public FollowsResponse followCancel(Long followingId, User follower) {
         // 검증 -> 팔로우 검색 -> 팔로우 삭제
         if(followingId.equals(follower.getId())){
@@ -54,5 +59,33 @@ public class FollowsService {
         followsRepository.delete(chekcFollow.get());
 
         return new FollowsResponse(chekcFollow.get());
+    }
+
+    /**
+     * 사용자가 팔로우 하는 전체 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public List<FollowsResponse> getFollowings(User user) {
+        List<Follows> followings = user.getFollowings();
+        List<FollowsResponse> response = new ArrayList<>();
+        for (Follows follows : followings) {
+            response.add(new FollowsResponse(follows));
+        }
+
+        return response;
+    }
+
+    /**
+     * 사용자를 팔로우 하는 전체 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public List<FollowsResponse> getFollowers(User user) {
+        List<Follows> followers = user.getFollowers();
+        List<FollowsResponse> response = new ArrayList<>();
+        for (Follows follows : followers) {
+            response.add(new FollowsResponse(follows));
+        }
+
+        return response;
     }
 }

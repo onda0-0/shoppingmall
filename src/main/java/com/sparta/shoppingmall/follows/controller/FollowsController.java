@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.sparta.shoppingmall.util.ControllerUtil.getBadRequestResponseEntity;
 import static com.sparta.shoppingmall.util.ControllerUtil.getResponseEntity;
 
@@ -49,7 +51,36 @@ public class FollowsController {
         } catch(Exception e) {
             return getBadRequestResponseEntity(e);
         }
+    }
 
+    /**
+     * following 목록 조회
+     */
+    @GetMapping
+    public ResponseEntity<CommonResponse> getFollowings(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        try{
+            List<FollowsResponse> response = followsService.getFollowings(userDetails.getUser());
+            return getResponseEntity(response, "팔로잉 목록 조회 성공");
+        } catch(Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
+    }
+
+    /**
+     * follower 목록 조회
+     */
+    @GetMapping
+    public ResponseEntity<CommonResponse> getFollowers(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        try{
+            List<FollowsResponse> response = followsService.getFollowers(userDetails.getUser());
+            return getResponseEntity(response, "팔로워 목록 조회 성공");
+        } catch(Exception e) {
+            return getBadRequestResponseEntity(e);
+        }
     }
 
 }
