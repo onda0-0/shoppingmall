@@ -3,6 +3,7 @@ package com.sparta.shoppingmall.user.entity;
 import com.sparta.shoppingmall.base.entity.Timestamped;
 import com.sparta.shoppingmall.cart.entity.Cart;
 import com.sparta.shoppingmall.comment.entity.Comment;
+import com.sparta.shoppingmall.follows.entity.Follows;
 import com.sparta.shoppingmall.like.entity.Likes;
 import com.sparta.shoppingmall.order.entity.OrderGroup;
 import com.sparta.shoppingmall.product.entity.Product;
@@ -77,6 +78,12 @@ public class User extends Timestamped {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follows> followers;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follows> followings;
 
     @Builder
     public User(String username, String password, String recentPassword, String recentPassword2, String recentPassword3,
