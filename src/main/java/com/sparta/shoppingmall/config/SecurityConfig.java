@@ -70,6 +70,7 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() //resource 접근 허용 설정
                 // /api/users/login.hasrole  << 특정 사용자한테만 허가
                 .requestMatchers(HttpMethod.POST,"/api/users/signup").permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/products/**").permitAll()
                 .anyRequest().authenticated()
         );
 
