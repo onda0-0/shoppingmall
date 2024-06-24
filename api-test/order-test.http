@@ -6,7 +6,7 @@ Content-Type: application/json
 {
   "address": "대전 서구",
   "totalPrice": 12300,
-  "productIdList" : [1, 2]
+  "productIdList" : [2, 3]
 }
 
 ### 사용자의 모든 주문내역 조회하기

@@ -47,8 +47,8 @@ GET http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
-  "username" : "momoysm",
-  "password" : "Abcdefg123!"
+  "username" : "{{username1}}",
+  "password" : "{{password1}}"
 }
 
 > {%
@@ -67,7 +67,7 @@ Content-Type: application/json
 Authorization:{{Authorization}}
 
 {
-  "password" : "Abcdefg123!"
+  "password" : "Momosfg123@"
 
 }
 
@@ -88,7 +88,7 @@ Content-Type: application/json
 }
 
 ### 유저 비밀번호 변경(200) -> ok
-PUT http://localhost:8080/api/users/updatePassword
+PUT http://localhost:8080/api/users/update-password
 Authorization: {{Authorization}}
 Content-Type: application/json
 
@@ -98,7 +98,7 @@ Content-Type: application/json
 }
 
 ### 유저 비밀번호 변경(새로운 비밀번호와 기존 비밀번호가 동일합니다.) -> ok
-PUT http://localhost:8080/api/users/updatePassword
+PUT http://localhost:8080/api/users/update-password
 Authorization: {{Authorization}}
 Content-Type: application/json
 
@@ -108,7 +108,7 @@ Content-Type: application/json
 }
 
 ### 유저 비밀번호 변경(현재 비밀번호가 일치하지 않습니다.) -> ok
-PUT http://localhost:8080/api/users/updatePassword
+PUT http://localhost:8080/api/users/update-password
 Authorization: {{Authorization}}
 Content-Type: application/json
 
@@ -118,7 +118,7 @@ Content-Type: application/json
 }
 
 ### 유저 비밀번호 변경(새로운 비밀번호는 최근 사용한 비밀번호와 다르게 설정해야 합니다) -> ok
-PUT http://localhost:8080/api/users/updatePassword
+PUT http://localhost:8080/api/users/update-password
 Authorization: {{Authorization}}
 Content-Type: application/json
 

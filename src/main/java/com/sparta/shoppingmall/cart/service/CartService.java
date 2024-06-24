@@ -86,7 +86,9 @@ public class CartService {
      */
     @Transactional
     public Long deleteCartProduct(Long productId, User user) {
-        Cart cart = user.getCart();
+        Cart cart = cartRepository.findByUserId(user.getId()).orElseThrow(
+                () -> new IllegalArgumentException("장바구니가 존재하지 않습니다. 상품을 담은 후 시도해주세요")
+        );
 
         CartProduct cartProduct = cartProductRepository.findByProductId(productId).orElseThrow(
                 () -> new IllegalArgumentException("해당 상품이 장바구니에 없습니다.")
