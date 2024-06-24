@@ -23,7 +23,7 @@ public class FollowsController {
     private final FollowsService followsService;
 
     /**
-     * 사용자 follow
+     * 팔로우
      */
     @PostMapping("/{followingId}")
     public ResponseEntity<CommonResponse> followUser(
@@ -39,7 +39,7 @@ public class FollowsController {
     }
 
     /**
-     * follow 취소
+     * 팔로우 취소
      */
     @DeleteMapping("/{followingId}")
     public ResponseEntity<CommonResponse> followCancel(
@@ -55,7 +55,7 @@ public class FollowsController {
     }
 
     /**
-     * following 목록 조회
+     * 팔로잉 목록 조회
      */
     @GetMapping("/followings")
     public ResponseEntity<CommonResponse> getFollowings(
@@ -70,7 +70,7 @@ public class FollowsController {
     }
 
     /**
-     * follower 목록 조회
+     * 팔로워 목록 조회
      */
     @GetMapping("/followers")
     public ResponseEntity<CommonResponse> getFollowers(
@@ -85,7 +85,7 @@ public class FollowsController {
     }
 
     /**
-     * 관리자 - follow 취소
+     * 관리자 - 팔로우 취소
      */
     @Secured("ADMIN")
     @DeleteMapping("/{followerId}/{followingId}")
@@ -106,7 +106,7 @@ public class FollowsController {
      * 관리자 - 해당 사용자의 팔로잉 목록 조회
      */
     @Secured("ADMIN")
-    @GetMapping("/{followerId}")
+    @GetMapping("/{followerId}/follower")
     public ResponseEntity<CommonResponse> getFollowingsAdmin(
             @PathVariable Long followerId
     ) {
@@ -122,7 +122,7 @@ public class FollowsController {
      * 관리자 - 해당 사용자의 팔로워 목록 조회
      */
     @Secured("ADMIN")
-    @GetMapping("/{followingId}")
+    @GetMapping("/{followingId}/following")
     public ResponseEntity<CommonResponse> getFollowersAdmin(
             @PathVariable Long followingId
     ) {

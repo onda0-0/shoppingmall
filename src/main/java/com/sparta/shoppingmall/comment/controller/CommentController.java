@@ -34,11 +34,11 @@ public class CommentController {
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "댓글 생성 성공");
+            return getFieldErrorResponseEntity(bindingResult, "댓글 생성 실패");
         }
         try{
             CommentResponse response = commentService.createComment(request, productId, userDetails.getUser());
-            return getResponseEntity(response, "댓글 생성 실패");
+            return getResponseEntity(response, "댓글 생성 성공");
         } catch (Exception e) {
             return getBadRequestResponseEntity(e);
         }

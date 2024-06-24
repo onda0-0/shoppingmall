@@ -4,6 +4,7 @@
 @name = 홍길동
 @email = test@gmail.com
 @address = 대전 서구 둔산동
+@userType = ADMIN
 
 
 @username1 = momoysm
@@ -11,6 +12,7 @@
 @name1 = 윤성모
 @email1 = test@gmail.com
 @address1 = 서울
+@userType1 = USER
 
 @newPassword=Momosfg123@
 
@@ -23,7 +25,8 @@ Content-Type: application/json
   "password" : "{{password}}",
   "name" : "{{name}}",
   "email" : "{{email}}",
-  "address" : "{{address}}"
+  "address" : "{{address}}",
+  "userType" : "{{userType}}"
 }
 
 ###회원가입1 -> 됨
@@ -35,7 +38,8 @@ Content-Type: application/json
   "password" : "{{password1}}",
   "name" : "{{name1}}",
   "email" : "{{email1}}",
-  "address" : "{{address1}}"
+  "address" : "{{address1}}",
+  "userType" : "{{userType1}}"
 }
 
 ###로그인 -> ok
@@ -44,7 +48,7 @@ Content-Type: application/json
 
 {
   "username" : "momoysm",
-  "password" : "Momosfg123@"
+  "password" : "Abcdefg123!"
 }
 
 > {%
@@ -57,13 +61,13 @@ DELETE http://localhost:8080/api/users/logout
 Authorization:{{Authorization}}
 
 
-### 유저 탈퇴 => 403발생
-DELETE http://localhost:8080/api/users/withdraw
+### 유저 탈퇴 => ok
+PATCH http://localhost:8080/api/users/withdraw
 Content-Type: application/json
 Authorization:{{Authorization}}
 
 {
-  "password" : "Momosfg123@"
+  "password" : "Abcdefg123!"
 
 }
 
