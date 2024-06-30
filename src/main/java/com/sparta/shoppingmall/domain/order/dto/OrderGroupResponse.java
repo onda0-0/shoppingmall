@@ -7,14 +7,14 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class OrderGroupResponseDto {
+public class OrderGroupResponse {
     private final Long groupId;
     private final String address;
     private final Long totalPrice;
     private final OrderStatus status;
     private final List<OrdersResponse> OrdersResponses;
 
-    public OrderGroupResponseDto(OrderGroup orderGroup, List<OrdersResponse> OrdersResponses) {
+    public OrderGroupResponse(OrderGroup orderGroup, List<OrdersResponse> OrdersResponses) {
         this.groupId = orderGroup.getId();
         this.address = orderGroup.getAddress();
         this.totalPrice = orderGroup.getTotalPrice();

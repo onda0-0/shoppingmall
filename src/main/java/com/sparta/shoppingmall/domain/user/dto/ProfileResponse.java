@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class EditProfileResponseDTO {
+public class ProfileResponse {
 
     private final Long id;
 
@@ -22,7 +22,7 @@ public class EditProfileResponseDTO {
     private final LocalDateTime updateAt;
 
 
-    public EditProfileResponseDTO(User user) {
+    public ProfileResponse(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();

@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
-    Page<Product> findAllByStatusInOrderByCreateAtDescStatusAsc(List<ProductStatus> condi, Pageable pageable);
+    Page<Product> findAllByStatusIn(Pageable pageable, List<ProductStatus> statuses);
 }

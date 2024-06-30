@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class OrderGroupRequestDto {
+public class OrderGroupRequest {
 
     @NotBlank(message = "배송지는 필수 값입니다.")
     private String address;

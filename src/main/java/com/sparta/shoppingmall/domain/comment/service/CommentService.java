@@ -29,7 +29,7 @@ public class CommentService {
     @Transactional
     public CommentResponse createComment(CommentRequest request, Long productId, User user) {
         Product product = productService.findByProductId(productId);
-        Comment comment = new Comment(request, user, product);
+        Comment comment = Comment.createComment(request, user, product);
 
         commentRepository.save(comment);
 

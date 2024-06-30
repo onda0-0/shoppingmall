@@ -26,10 +26,16 @@ public class Orders extends Timestamped{
     private OrderGroup orderGroup;
 
     @Builder
-    public Orders(String productName, Long productPrice, OrderGroup orderGroup) {
+    public Orders(String productName, Long productPrice) {
         this.productName = productName;
         this.productPrice = productPrice;
-        this.orderGroup = orderGroup;
+    }
+
+    public static Orders createOrders(String productName, Long productPrice){
+        return Orders.builder()
+                .productName(productName)
+                .productPrice(productPrice)
+                .build();
     }
 
 }

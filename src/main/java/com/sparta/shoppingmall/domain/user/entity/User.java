@@ -7,7 +7,7 @@ import com.sparta.shoppingmall.domain.follows.entity.Follows;
 import com.sparta.shoppingmall.domain.like.entity.Likes;
 import com.sparta.shoppingmall.domain.order.entity.OrderGroup;
 import com.sparta.shoppingmall.domain.product.entity.Product;
-import com.sparta.shoppingmall.domain.user.dto.SignupRequestDTO;
+import com.sparta.shoppingmall.domain.user.dto.SignupRequest;
 import com.sparta.shoppingmall.domain.user.dto.AdminUpdateUserRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,10 +60,7 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserStatus userStatus;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime statusChangedAt;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -79,48 +75,50 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Follows> followings;
-
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Follows> followers;
+    private List<Follows> followings; //내가 팔로잉 하는 리스트
+
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follows> followers; //나를 팔로우 하는 리스트
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 
     @Builder
-    public User(String username, String password, String recentPassword, String recentPassword2, String recentPassword3,
-                String name, String email, String address, UserStatus userStatus,UserType userType ,LocalDateTime statusChangedAt,
-                List<Product> products, Cart cart, List<OrderGroup> orderGroups, List<Likes> likes,
-                List<Follows> followers, List<Follows> followings) {
+    public User(String username, String password, String name, String email, String address, UserStatus userStatus, UserType userType) {
         this.username = username;
         this.password = password;
-        this.recentPassword = recentPassword;
-        this.recentPassword2 = recentPassword2;
-        this.recentPassword3 = recentPassword3;
         this.name = name;
         this.email = email;
         this.address = address;
         this.userStatus = userStatus;
         this.userType = userType;
-        this.statusChangedAt = statusChangedAt;
-        this.products = products;
-        this.cart = cart;
-        this.orderGroups = orderGroups;
-        this.likes = likes;
-        this.followers = followers;
-        this.followings = followings;
     }
 
     /**
-     * 회원가입 생성자
+     * 사용자 생성
      */
-    public User (SignupRequestDTO request, String password, UserType userType, UserStatus userStatus, LocalDateTime statusChangedAt) {
-        this.username = request.getUsername();
-        this.password = password;
-        this.name = request.getName();
-        this.email = request.getEmail();
-        this.address = request.getAddress();
-        this.userType = userType;
-        this.userStatus = userStatus;
-        this.statusChangedAt = statusChangedAt;
+    private static User createUser(final SignupRequest request, String password, UserType userType) {
+        return User.builder()
+                .username(request.getUsername())
+                .password(password)
+                .name(request.getName())
+                .email(request.getEmail())
+                .address(request.getAddress())
+                .userStatus(UserStatus.JOIN)
+                .userType(userType)
+                .build();
+    }
+
+    /**
+     * 사용자 생성과 동시에 장바구니 생성
+     */
+    public static User createUserWithCart(final SignupRequest request, String password, UserType userType){
+        User user = createUser(request, password, userType);
+        Cart cart = Cart.createCart(user);
+        user.setCart(cart);
+        return user;
     }
 
     /**
@@ -140,7 +138,6 @@ public class User extends Timestamped {
         this.recentPassword2 = this.recentPassword;
         this.recentPassword = this.password;
         this.password = newPassword;
-
     }
 
     /**

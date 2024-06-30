@@ -8,53 +8,67 @@ import com.sparta.shoppingmall.common.jwt.RefreshTokenService;
 import com.sparta.shoppingmall.domain.user.dto.*;
 import com.sparta.shoppingmall.domain.user.entity.User;
 import com.sparta.shoppingmall.domain.user.entity.UserStatus;
+import com.sparta.shoppingmall.domain.user.entity.UserType;
 import com.sparta.shoppingmall.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final RefreshTokenService refreshTokenService;
 
     /**
-     * 회원 가입
+     * 일반회원 - 회원 가입
      */
     @Transactional
-    public SignupResponseDTO createUser(SignupRequestDTO request) {
+    public SignupResponse createUser(SignupRequest request) {
         //아이디 중복 검사
         validateUsername(request.getUsername());
 
         //비밀번호 암호화
         String password = passwordEncoder.encode(request.getPassword());
-        User user = new User(request, password, request.getUserType(), UserStatus.JOIN, LocalDateTime.now());
+        User user = User.createUserWithCart(request, password, UserType.USER);
 
         userRepository.save(user);
 
-        return new SignupResponseDTO(user);
+        return new SignupResponse(user);
+    }
+
+    /**
+     * 관리자 - 회원가입
+     */
+    @Transactional
+    public SignupResponse createAdminUser(SignupRequest request) {
+        //아이디 중복 검사
+        validateUsername(request.getUsername());
+
+        //비밀번호 암호화
+        String password = passwordEncoder.encode(request.getPassword());
+        User user = User.createUserWithCart(request, password, UserType.ADMIN);
+
+        userRepository.save(user);
+
+        return new SignupResponse(user);
     }
 
     /**
      * 회원 탈퇴
      */
     @Transactional
-    public Long withdrawUser(WithdrawRequestDTO request, User user) {
-        //회원 상태 확인
-        checkUserStatus(user.getUserStatus());
-
+    public Long withdrawUser(WithdrawRequest request, User user) {
         //비밀번호 일치 확인
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new PasswordMismatchException("비밀번호가 일치하지 않습니다.");
@@ -74,7 +88,6 @@ public class UserService {
     public Long logout(Long userId) {
         //사용자 조회
         User user = findById(userId);
-
         refreshTokenService.deleteToken(user.getUsername());
 
         return user.getId();
@@ -84,11 +97,11 @@ public class UserService {
     /**
      * 회원 조회 (유저 아이디)
      */
-    public EditProfileResponseDTO inquiryUser(Long userId, User user) {
+    public ProfileResponse inquiryUser(Long userId, User user) {
         if(!Objects.equals(user.getId(), userId)) {
             throw new UserMismatchException("사용자가 일치하지 않습니다.");
         }
-        return new EditProfileResponseDTO(user);
+        return new ProfileResponse(user);
     }
 
 
@@ -96,21 +109,21 @@ public class UserService {
      * 회원 프로필 수정
      */
     @Transactional // 변경할 필드만 수정하고 바꾸지 않은 필드는 기존 데이터를 유지하는 메서드
-    public UserResponseDTO editProfile(Long userId, EditProfileRequestDTO request, User user) {
+    public UserResponse editProfile(Long userId, ProfileRequest request, User user) {
         if(!Objects.equals(userId, user.getId())){
             throw new UserMismatchException("사용자가 일치하지 않습니다.");
         }
         user.editProfile(request.getName(), request.getEmail(), request.getAddress());
         userRepository.save(user);
 
-        return new UserResponseDTO(user);
+        return new UserResponse(user);
     }
 
     /**
      * 비밀번호 변경
      */
     @Transactional
-    public UserResponseDTO editPassword(EditPasswordRequestDTO request, User user) {
+    public UserResponse editPassword(EditPasswordRequest request, User user) {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new PasswordMismatchException("현재 비밀번호가 일치하지 않습니다.");
         }
@@ -132,13 +145,14 @@ public class UserService {
         user.changePassword(editPassword);
         userRepository.save(user);
 
-        return new UserResponseDTO(user);
+        return new UserResponse(user);
     }
 
 
     /**
      * 회원 전체 조회 - 관리자
      */
+    @Transactional(readOnly = true)
     public List<AdminUserResponse> getUserList() {
         List<User> userList = userRepository.findAll();
         List<AdminUserResponse> response = new ArrayList<>();
@@ -159,6 +173,8 @@ public class UserService {
 
         return new AdminUserResponse(findUser);
     }
+
+    // 회원정보 수정 - 관리자 변경 -> 회원 상태 변경, 회원 타입 변경 메서드 빼기
 
     /**
      * 회원 상태 확인
@@ -187,5 +203,4 @@ public class UserService {
                 () -> new UserMismatchException("해당 사용자는 존재하지 않습니다.")
         );
     }
-
 }

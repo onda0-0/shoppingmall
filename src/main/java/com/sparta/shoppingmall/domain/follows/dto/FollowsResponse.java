@@ -7,13 +7,17 @@ import lombok.Getter;
 public class FollowsResponse {
 
     private final Long id;
-    private final Long followerId;
-    private final Long followingId;
+    private final String followerUsername;
+    private final String followerName;
+    private final String followingUsername;
+    private final String followingName;
 
     public FollowsResponse(Follows follows) {
         this.id = follows.getId();
-        this.followerId = follows.getFollower().getId();
-        this.followingId = follows.getFollowing().getId();
+        this.followerUsername = follows.getFollower().getUsername();
+        this.followerName = follows.getFollower().getName();
+        this.followingUsername = follows.getFollowing().getUsername();
+        this.followingName = follows.getFollowing().getName();
     }
 
 }

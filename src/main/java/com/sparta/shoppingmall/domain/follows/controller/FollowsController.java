@@ -1,9 +1,9 @@
 package com.sparta.shoppingmall.domain.follows.controller;
 
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
-import com.sparta.shoppingmall.domain.follows.service.FollowsService;
-import com.sparta.shoppingmall.domain.follows.dto.FollowsResponse;
 import com.sparta.shoppingmall.common.security.UserDetailsImpl;
+import com.sparta.shoppingmall.domain.follows.dto.FollowsResponse;
+import com.sparta.shoppingmall.domain.follows.service.FollowsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.sparta.shoppingmall.common.util.ControllerUtil.getBadRequestResponseEntity;
 import static com.sparta.shoppingmall.common.util.ControllerUtil.getResponseEntity;
 
 @RestController

@@ -1,19 +1,18 @@
 package com.sparta.shoppingmall.domain.order.controller;
 
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
-import com.sparta.shoppingmall.domain.order.dto.OrderGroupRequestDto;
-import com.sparta.shoppingmall.domain.order.dto.OrderGroupResponseDto;
-import com.sparta.shoppingmall.domain.order.service.OrderGroupService;
 import com.sparta.shoppingmall.common.security.UserDetailsImpl;
+import com.sparta.shoppingmall.domain.order.dto.OrderGroupRequest;
+import com.sparta.shoppingmall.domain.order.dto.OrderGroupResponse;
+import com.sparta.shoppingmall.domain.order.service.OrderGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.sparta.shoppingmall.common.util.ControllerUtil.*;
+import static com.sparta.shoppingmall.common.util.ControllerUtil.getResponseEntity;
 
 
 @RestController
@@ -28,14 +27,10 @@ public class OrderGroupController {
      */
     @PostMapping
     public ResponseEntity<CommonResponse> createOrder(
-            @RequestBody OrderGroupRequestDto orderGroupRequestDto,
-            BindingResult bindingResult,
+            @RequestBody OrderGroupRequest orderGroupRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "상품 주문 실패");
-        }
-        OrderGroupResponseDto response = orderGroupService.createOrder(orderGroupRequestDto, userDetails.getUser());
+        OrderGroupResponse response = orderGroupService.createOrder(orderGroupRequestDto, userDetails.getUser());
         return getResponseEntity(response, "상품 주문 성공");
     }
 
@@ -46,7 +41,7 @@ public class OrderGroupController {
     public ResponseEntity<CommonResponse> getOrderGroups(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        List<OrderGroupResponseDto> response = orderGroupService.getOrderGroups(userDetails.getUser());
+        List<OrderGroupResponse> response = orderGroupService.getOrderGroups(userDetails.getUser());
         return getResponseEntity(response, "전체 주문내역 조회 성공");
     }
 
@@ -58,7 +53,7 @@ public class OrderGroupController {
         @PathVariable Long orderGroupId,
         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        OrderGroupResponseDto response = orderGroupService.getOrderGroup(orderGroupId, userDetails.getUser());
+        OrderGroupResponse response = orderGroupService.getOrderGroup(orderGroupId, userDetails.getUser());
         return getResponseEntity(response, "상세 주문내역 조회 성공");
     }
 
@@ -67,8 +62,8 @@ public class OrderGroupController {
      */
     @PutMapping("/{groupId}")
     public ResponseEntity<CommonResponse> cancelOrder(
-            @PathVariable Long groupId
-            ,@AuthenticationPrincipal UserDetailsImpl userDetails
+            @PathVariable Long groupId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         Long response = orderGroupService.cancelOrder(groupId, userDetails.getUser());
         return getResponseEntity(response, "주문 취소 성공");

@@ -1,20 +1,19 @@
 package com.sparta.shoppingmall.domain.comment.controller;
 
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
+import com.sparta.shoppingmall.common.security.UserDetailsImpl;
 import com.sparta.shoppingmall.domain.comment.dto.CommentRequest;
 import com.sparta.shoppingmall.domain.comment.dto.CommentResponse;
 import com.sparta.shoppingmall.domain.comment.service.CommentService;
-import com.sparta.shoppingmall.common.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.sparta.shoppingmall.common.util.ControllerUtil.*;
+import static com.sparta.shoppingmall.common.util.ControllerUtil.getResponseEntity;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,12 +29,8 @@ public class CommentController {
     public ResponseEntity<CommonResponse> createComment(
             @PathVariable Long productId,
             @Valid @RequestBody CommentRequest request,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            BindingResult bindingResult
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "댓글 생성 실패");
-        }
         CommentResponse response = commentService.createComment(request, productId, userDetails.getUser());
         return getResponseEntity(response, "댓글 생성 성공");
     }
@@ -60,12 +55,8 @@ public class CommentController {
             @PathVariable Long productId,
             @PathVariable Long commentId,
             @Valid @RequestBody CommentRequest request,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            BindingResult bindingResult
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        if(bindingResult.hasErrors()){
-            return getFieldErrorResponseEntity(bindingResult, "댓글 수정 실패");
-        }
         CommentResponse response = commentService.updateComments(request, productId, commentId, userDetails.getUser());
         return getResponseEntity(response, "댓글 수정 성공");
     }

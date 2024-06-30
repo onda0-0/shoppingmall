@@ -40,12 +40,18 @@ public class Comment extends Timestamped {
      * 전체 생성자
      */
     @Builder
-    public Comment(Long id, String content, int likeCount, User user, Product product) {
-        this.id = id;
+    public Comment(String content, User user, Product product) {
         this.content = content;
-        this.likeCount = likeCount;
         this.user = user;
         this.product = product;
+    }
+
+    public static Comment createComment(CommentRequest request, User user, Product product){
+        return Comment.builder()
+                .content(request.getContent())
+                .user(user)
+                .product(product)
+                .build();
     }
 
     /**

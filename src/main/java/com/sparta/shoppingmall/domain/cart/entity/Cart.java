@@ -28,16 +28,17 @@ public class Cart {
     private User user;
 
     @Builder
-    public Cart (List<CartProduct> cartProducts, User user) {
-        this.cartProducts = cartProducts;
+    public Cart (User user) {
         this.user = user;
     }
 
     /**
-     * 사용자 생성 시 장바구니 동시 생성
+     * 장바구니 생성
      */
-    public Cart (User user) {
-        this.user = user;
+    public static Cart createCart(User user) {
+        return Cart.builder()
+                .user(user)
+                .build();
     }
 
     /**

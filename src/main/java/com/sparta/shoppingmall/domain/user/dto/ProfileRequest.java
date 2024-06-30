@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class EditProfileRequestDTO {
+public class ProfileRequest {
 
     @NotBlank(message = "이름을 입력해주세요.")
     private String name;

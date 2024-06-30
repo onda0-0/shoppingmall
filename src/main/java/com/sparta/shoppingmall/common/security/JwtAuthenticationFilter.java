@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
 import com.sparta.shoppingmall.common.jwt.JwtProvider;
 import com.sparta.shoppingmall.common.jwt.RefreshTokenService;
-import com.sparta.shoppingmall.domain.user.dto.LoginRequestDTO;
+import com.sparta.shoppingmall.domain.user.dto.LoginRequest;
 import com.sparta.shoppingmall.domain.user.entity.UserType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,8 +40,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            LoginRequestDTO requestDto = new ObjectMapper()
-                    .readValue(request.getInputStream(), LoginRequestDTO.class);
+            LoginRequest requestDto = new ObjectMapper()
+                    .readValue(request.getInputStream(), LoginRequest.class);
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(

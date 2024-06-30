@@ -1,6 +1,7 @@
 package com.sparta.shoppingmall.domain.cart.entity;
 
 import com.sparta.shoppingmall.common.base.entity.Timestamped;
+import com.sparta.shoppingmall.common.exception.customexception.ProductDuplicatedException;
 import com.sparta.shoppingmall.domain.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,7 +23,7 @@ public class CartProduct extends Timestamped {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -30,14 +31,16 @@ public class CartProduct extends Timestamped {
     public CartProduct(Cart cart, Product product) {
         this.cart = cart;
         this.product = product;
-        this.cart.addCartProduct(this);
     }
 
     /**
      * CartProduct 생성
      */
     public static CartProduct createCartProduct(Cart cart, Product product) {
-        return new CartProduct(cart, product);
+        return CartProduct.builder()
+                .cart(cart)
+                .product(product)
+                .build();
     }
 
     /**
@@ -45,7 +48,7 @@ public class CartProduct extends Timestamped {
      */
     public void verifyCartProduct(Long productId) {
         if(productId.equals(this.product.getId())){
-            throw new IllegalArgumentException("중복된 상품이 존재합니다.");
+            throw new ProductDuplicatedException("중복된 상품이 존재합니다.");
         }
     }
 

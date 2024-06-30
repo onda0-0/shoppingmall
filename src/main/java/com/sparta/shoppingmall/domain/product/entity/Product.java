@@ -3,6 +3,7 @@ package com.sparta.shoppingmall.domain.product.entity;
 import com.sparta.shoppingmall.common.base.entity.Timestamped;
 import com.sparta.shoppingmall.domain.comment.entity.Comment;
 import com.sparta.shoppingmall.domain.order.entity.OrderGroup;
+import com.sparta.shoppingmall.domain.product.dto.ProductRequest;
 import com.sparta.shoppingmall.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -52,10 +53,22 @@ public class Product extends Timestamped {
      */
     @Builder
     public Product(String name, Long price, ProductStatus status, User user){
-        this.user = user;
         this.name = name;
         this.price = price;
         this.status = status;
+        this.user = user;
+    }
+
+    /**
+     * 상품 생성
+     */
+    public static Product createProduct(ProductRequest request, ProductStatus status, User user) {
+        return Product.builder()
+                .name(request.getName())
+                .price(request.getPrice())
+                .status(status)
+                .user(user)
+                .build();
     }
 
     /**
@@ -76,12 +89,10 @@ public class Product extends Timestamped {
     /**
      * 상품 상태 확인
      */
-    public boolean checkProductStatus() {
+    public Boolean checkProductStatus() {
          return switch(this.status) {
-            case RECOMMAND -> true;
-            case ONSALE -> true;
-            case COMPLETED -> false;
-            case INPROGRESS -> false;
+             case RECOMMEND, ONSALE -> true;
+             case COMPLETED, INPROGRESS -> false;
         };
     }
 

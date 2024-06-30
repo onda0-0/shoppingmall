@@ -2,7 +2,7 @@ package com.sparta.shoppingmall.domain.product.service;
 
 import com.sparta.shoppingmall.common.exception.customexception.ProductNotFoundException;
 import com.sparta.shoppingmall.common.exception.customexception.UserMismatchException;
-import com.sparta.shoppingmall.common.exception.customexception.UserNotFoundException;
+import com.sparta.shoppingmall.common.util.PageUtil;
 import com.sparta.shoppingmall.domain.product.dto.ProductRequest;
 import com.sparta.shoppingmall.domain.product.dto.ProductResponse;
 import com.sparta.shoppingmall.domain.product.entity.Product;
@@ -14,7 +14,6 @@ import com.sparta.shoppingmall.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +36,7 @@ public class ProductService {
     public ProductResponse createProduct(ProductRequest productRequest, Long userId) {
         User user = userService.findById(userId);
 
-        Product product = Product.builder()
-                .user(user)
-                .name(productRequest.getName())
-                .price(productRequest.getPrice())
-                .status(ProductStatus.ONSALE)
-                .build();
+        Product product = Product.createProduct(productRequest, ProductStatus.ONSALE, user);
 
         productRepository.save(product);
 
@@ -60,14 +54,14 @@ public class ProductService {
      * 상품조회(전체) get api/products -> 5개씩 / 정렬 = 최신순, 추천, 판매중 상품
      */
     @Transactional(readOnly = true)
-    public List<ProductResponse> getProducts(int page) {
-        Pageable pageable = PageRequest.of(page-1, 5);
+    public List<ProductResponse> getProducts(final Integer pageNum, final Boolean isDesc) {
+        Pageable pageable = PageUtil.createPageable(pageNum, PageUtil.PAGE_SIZE_FIVE, isDesc);
 
-        List<ProductStatus> condi = new ArrayList<>();
-        condi.add(ProductStatus.ONSALE);
-        condi.add(ProductStatus.RECOMMAND);
+        List<ProductStatus> statuses = new ArrayList<>();
+        statuses.add(ProductStatus.ONSALE);
+        statuses.add(ProductStatus.RECOMMEND);
 
-        Page<Product> products = productRepository.findAllByStatusInOrderByCreateAtDescStatusAsc(condi, pageable);
+        Page<Product> products = productRepository.findAllByStatusIn(pageable, statuses);
 
         List<ProductResponse> productResponses = new ArrayList<>();
 
@@ -115,10 +109,8 @@ public class ProductService {
             }
         }
 
-        product.update(
-                productRequest.getName(),
-                productRequest.getPrice()
-        );
+        product.update(productRequest.getName(), productRequest.getPrice());
+
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())

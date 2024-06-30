@@ -40,7 +40,7 @@ public class FollowsService {
         if(UserStatus.WITHDRAW.equals(following.getUserStatus())){
             throw new FollowRejectedException("이미 탈퇴한 사용자는 팔로우할 수 없습니다.");
         }
-        Follows follow = new Follows(follower, following);
+        Follows follow = Follows.createFollows(follower, following);
         followsRepository.save(follow);
 
         return new FollowsResponse(follow);
@@ -67,7 +67,7 @@ public class FollowsService {
     }
 
     /**
-     * 사용자를 팔로우 하는 전체 목록 조회
+     * 사용자가 팔로우하는 사용자 목록
      */
     @Transactional(readOnly = true)
     public List<FollowsResponse> getFollowings(User user) {
@@ -81,11 +81,11 @@ public class FollowsService {
     }
 
     /**
-     * 사용자가 팔로우 하는 전체 목록 조회
+     * 사용자를 팔로우 하는 사용자 목록 조회
      */
     @Transactional(readOnly = true)
     public List<FollowsResponse> getFollowers(User user) {
-        List<Follows> followers = userService.findById(user.getId()).getFollowers();    // 안좋은거 -> 내가 팔로우 하고 있는 사람
+        List<Follows> followers = userService.findById(user.getId()).getFollowers();
         List<FollowsResponse> response = new ArrayList<>();
         for (Follows follows : followers) {
             response.add(new FollowsResponse(follows));
@@ -106,6 +106,8 @@ public class FollowsService {
         Follows follow = followsRepository.findByFollowingIdAndFollowerId(followingId, followerId).orElseThrow(
                 () -> new FollowRejectedException("해당 팔로우는 이미 취소된 팔로우입니다.")
         );
+
+        followsRepository.delete(follow);
 
         return new FollowsResponse(follow);
     }

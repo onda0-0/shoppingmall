@@ -31,12 +31,8 @@ public class LikesController {
     public ResponseEntity<CommonResponse> toggleProductLike (
             @PathVariable Long productId,
             @Valid @RequestBody LikesRequest request,
-            BindingResult bindingResult,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-       if(bindingResult.hasErrors()) {
-           return getFieldErrorResponseEntity(bindingResult, "상품 좋아요 토글 실패");
-       }
        verifyPathVariable(productId, request.getContentId());
 
        LikesResponse response = likesService.toggleLike(request, userDetails.getUser());
@@ -50,18 +46,17 @@ public class LikesController {
     public ResponseEntity<CommonResponse> toggleCommentLike (
             @PathVariable Long commentId,
             @Valid @RequestBody LikesRequest request,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            BindingResult bindingResult
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        if(bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "댓글 좋아요 토글 실패");
-        }
         verifyPathVariable(commentId, request.getContentId());
 
         LikesResponse response = likesService.toggleLike(request, userDetails.getUser());
         return getResponseEntity(response, "댓글 좋아요 토글 성공");
     }
 
+    /**
+     * PathVariable값과 RequestBody 값을 비교
+     */
     private void verifyPathVariable(Long contentId, Long requestId) {
         if (!Objects.equals(contentId, requestId)) {
             throw new LikeMismatchException("PathVariable의 contentId와 RequestBody의 contentId가 다릅니다.");

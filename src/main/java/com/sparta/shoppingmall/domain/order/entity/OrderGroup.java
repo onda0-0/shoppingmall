@@ -1,6 +1,8 @@
 package com.sparta.shoppingmall.domain.order.entity;
 
 import com.sparta.shoppingmall.common.base.entity.Timestamped;
+import com.sparta.shoppingmall.common.exception.customexception.UserMismatchException;
+import com.sparta.shoppingmall.domain.order.dto.OrderGroupRequest;
 import com.sparta.shoppingmall.domain.product.entity.Product;
 import com.sparta.shoppingmall.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -54,6 +56,16 @@ public class OrderGroup extends Timestamped {
         this.products = products;
     }
 
+    public static OrderGroup createOrderGroup(OrderGroupRequest request, OrderStatus orderStatus, User user, List<Product> productList){
+        return OrderGroup.builder()
+                .address(request.getAddress())
+                .totalPrice(request.getTotalPrice())
+                .status(orderStatus)
+                .user(user)
+                .products(productList)
+                .build();
+    }
+
     /**
      * 주문 상태 업데이트
      */
@@ -84,7 +96,7 @@ public class OrderGroup extends Timestamped {
      */
     public void verifyOrderGroupUser(Long userId) {
         if (!userId.equals(this.user.getId())) {
-           throw new IllegalArgumentException("주문자와 사용자가 일치하지 않습니다.");
+           throw new UserMismatchException("주문자와 사용자가 일치하지 않습니다.");
         }
     }
 

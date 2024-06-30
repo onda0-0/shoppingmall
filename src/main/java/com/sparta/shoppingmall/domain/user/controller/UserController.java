@@ -10,12 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.sparta.shoppingmall.common.util.ControllerUtil.*;
+import static com.sparta.shoppingmall.common.util.ControllerUtil.getResponseEntity;
 
 @Slf4j
 @RestController
@@ -26,17 +25,24 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * 회원 가입
+     * 일반 회원 - 회원 가입
      */
-    @PostMapping("/signup")
+    @PostMapping
     public ResponseEntity<CommonResponse> createUser(
-            @Valid @RequestBody SignupRequestDTO requestDTO,
-            BindingResult bindingResult
+            @Valid @RequestBody SignupRequest requestDTO
     ) {
-        if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "회원가입 실패");
-        }
-        SignupResponseDTO response = userService.createUser(requestDTO);
+        SignupResponse response = userService.createUser(requestDTO);
+        return getResponseEntity(response, "회원가입 성공");
+    }
+
+    /**
+     * 관리자 - 회원가입
+     */
+    @PostMapping("/admin")
+    public ResponseEntity<CommonResponse> createAdminUser(
+            @Valid @RequestBody SignupRequest requestDTO
+    ) {
+        SignupResponse response = userService.createAdminUser(requestDTO);
         return getResponseEntity(response, "회원가입 성공");
     }
 
@@ -45,13 +51,9 @@ public class UserController {
      */
     @PatchMapping("/withdraw")
     public ResponseEntity<CommonResponse> withdrawUser(
-            @Valid @RequestBody WithdrawRequestDTO requestDTO,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            BindingResult bindingResult
+            @Valid @RequestBody WithdrawRequest requestDTO,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "회원탈퇴 실패");
-        }
         Long response = userService.withdrawUser(requestDTO, userDetails.getUser());
         return getResponseEntity(response, "회원탈퇴 성공");
 
@@ -76,7 +78,7 @@ public class UserController {
             @PathVariable Long userId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        EditProfileResponseDTO response = userService.inquiryUser(userId, userDetails.getUser());
+        ProfileResponse response = userService.inquiryUser(userId, userDetails.getUser());
         return getResponseEntity(response, "프로필 조회 성공");
     }
 
@@ -86,14 +88,10 @@ public class UserController {
     @PatchMapping("/{userId}/profiles")
     public ResponseEntity<CommonResponse> updateProfile(
             @PathVariable Long userId,
-            @Valid @RequestBody EditProfileRequestDTO request,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            BindingResult bindingResult
+            @Valid @RequestBody ProfileRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "프로필 수정 실패");
-        }
-        UserResponseDTO response = userService.editProfile(userId, request, userDetails.getUser());
+        UserResponse response = userService.editProfile(userId, request, userDetails.getUser());
         return getResponseEntity(response, "프로필 수정 성공");
     }
 
@@ -102,14 +100,10 @@ public class UserController {
      */
     @PutMapping("/update-password")
     public ResponseEntity<CommonResponse> updatePassword(
-            @Valid @RequestBody EditPasswordRequestDTO request,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            BindingResult bindingResult
+            @Valid @RequestBody EditPasswordRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "비밀번호 변경 실패");
-        }
-        UserResponseDTO response = userService.editPassword(request, userDetails.getUser());
+        UserResponse response = userService.editPassword(request, userDetails.getUser());
         return getResponseEntity(response, "비밀번호 변경 성공");
     }
 

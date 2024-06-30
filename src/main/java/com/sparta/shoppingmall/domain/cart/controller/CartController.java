@@ -1,20 +1,19 @@
 package com.sparta.shoppingmall.domain.cart.controller;
 
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
+import com.sparta.shoppingmall.common.security.UserDetailsImpl;
 import com.sparta.shoppingmall.domain.cart.dto.CartProductRequest;
 import com.sparta.shoppingmall.domain.cart.dto.CartProductResponse;
 import com.sparta.shoppingmall.domain.cart.dto.CartResponse;
 import com.sparta.shoppingmall.domain.cart.service.CartService;
-import com.sparta.shoppingmall.common.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import static com.sparta.shoppingmall.common.util.ControllerUtil.*;
+import static com.sparta.shoppingmall.common.util.ControllerUtil.getResponseEntity;
 
 @Slf4j
 @RestController
@@ -30,12 +29,8 @@ public class CartController {
     @PostMapping("/products")
     public ResponseEntity<CommonResponse> creatCartProduct(
             @Valid @RequestBody CartProductRequest cartProductRequest,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            BindingResult bindingResult
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "장바구니에 상품 추가 실패");
-        }
         CartProductResponse response = cartService.addCartProduct(cartProductRequest, userDetails.getUser());
         return getResponseEntity(response, "장바구니에 상품 추가 성공");
     }
@@ -45,10 +40,11 @@ public class CartController {
      */
     @GetMapping("/products")
     public ResponseEntity<CommonResponse> getCartProducts(
-            @RequestParam int page,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum,
+            @RequestParam(value = "isDesc", required = false, defaultValue = "true") final Boolean isDesc,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        CartResponse response = cartService.getCartProducts(page, userDetails.getUser());
+        CartResponse response = cartService.getCartProducts(pageNum, isDesc, userDetails.getUser());
         return getResponseEntity(response, "장바구니 조회 성공");
     }
 

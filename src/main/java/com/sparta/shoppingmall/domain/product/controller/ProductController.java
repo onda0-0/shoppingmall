@@ -1,20 +1,19 @@
 package com.sparta.shoppingmall.domain.product.controller;
 
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
+import com.sparta.shoppingmall.common.security.UserDetailsImpl;
+import com.sparta.shoppingmall.domain.product.dto.ProductRequest;
 import com.sparta.shoppingmall.domain.product.dto.ProductResponse;
 import com.sparta.shoppingmall.domain.product.service.ProductService;
-import com.sparta.shoppingmall.domain.product.dto.ProductRequest;
-import com.sparta.shoppingmall.common.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.sparta.shoppingmall.common.util.ControllerUtil.*;
+import static com.sparta.shoppingmall.common.util.ControllerUtil.getResponseEntity;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,12 +28,8 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<CommonResponse> createProduct(
             @Valid @RequestBody ProductRequest productRequest,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            BindingResult bindingResult
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        if (bindingResult.hasErrors()) {
-            return getFieldErrorResponseEntity(bindingResult, "상품 추가 실패");
-        }
         ProductResponse response = productService.createProduct(productRequest, userDetails.getUser().getId());
         return getResponseEntity(response, "상품 등록 성공");
     }
@@ -44,9 +39,10 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<CommonResponse> getProducts(
-            @RequestParam int page
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum,
+            @RequestParam(value = "isDesc", required = false, defaultValue = "true") final Boolean isDesc
     ) {
-        List<ProductResponse> response = productService.getProducts(page);
+        List<ProductResponse> response = productService.getProducts(pageNum, isDesc);
         return getResponseEntity(response, "상품 목록 조회 성공");
     }
 

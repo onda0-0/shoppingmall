@@ -1,8 +1,8 @@
 package com.sparta.shoppingmall.domain.order.service;
 
 import com.sparta.shoppingmall.common.exception.customexception.OrderNotFoundException;
-import com.sparta.shoppingmall.domain.order.dto.OrderGroupRequestDto;
-import com.sparta.shoppingmall.domain.order.dto.OrderGroupResponseDto;
+import com.sparta.shoppingmall.domain.order.dto.OrderGroupRequest;
+import com.sparta.shoppingmall.domain.order.dto.OrderGroupResponse;
 import com.sparta.shoppingmall.domain.order.dto.OrdersResponse;
 import com.sparta.shoppingmall.domain.order.entity.OrderGroup;
 import com.sparta.shoppingmall.domain.order.entity.OrderStatus;
@@ -31,63 +31,54 @@ public class OrderGroupService {
      * 주문하기 (OrderGroup생성 -> Order생성)
      */
     @Transactional
-    public OrderGroupResponseDto createOrder(OrderGroupRequestDto request, User user) {
+    public OrderGroupResponse createOrder(OrderGroupRequest request, User user) {
         //주문한 상품들 불러오기
         List<Long> productIdList = request.getProductIdList();
         List<Product> productList = new ArrayList<>();
+
         for(Long productId : productIdList){
             Product product = productService.findByProductId(productId);
             //상품이 판매중 상태일 때만 주문
-            if(ProductStatus.ONSALE.equals(product.getStatus())){
+            if(ProductStatus.ONSALE.equals(product.getStatus()) || ProductStatus.RECOMMEND.equals(product.getStatus())){
                 productList.add(product);
             }
         }
 
         //주문시 OrderGroup 생성
-        OrderGroup orderGroup = OrderGroup.builder()
-                .address(request.getAddress())
-                .totalPrice(request.getTotalPrice())
-                .status(OrderStatus.ORDERED)
-                .user(user)
-                .products(productList)
-                .build();
+        OrderGroup orderGroup = OrderGroup.createOrderGroup(request, OrderStatus.ORDERED, user, productList);
 
         List<OrdersResponse> ordersResponses = new ArrayList<>();
         //Orders 생성
         for(Product product : productList){
-            Orders orders = Orders.builder()
-                    .productName(product.getName())
-                    .productPrice(product.getPrice())
-                    .orderGroup(orderGroup)
-                    .build();
+            Orders orders = Orders.createOrders(product.getName(), product.getPrice());
+            orderGroup.addOrder(orders);
             ordersResponses.add(new OrdersResponse(orders));
 
             // 상품 상태 판매중으로 변경
             product.updateStatus(ProductStatus.INPROGRESS);
-            orderGroup.addOrder(orders);
         }
 
         orderGroupRepository.save(orderGroup);
 
-        return new OrderGroupResponseDto(orderGroup, ordersResponses);
+        return new OrderGroupResponse(orderGroup, ordersResponses);
     }
 
     /**
      * 사용자의 모든 주문내역 조회하기
      */
     @Transactional(readOnly = true)
-    public List<OrderGroupResponseDto> getOrderGroups(User user) {
+    public List<OrderGroupResponse> getOrderGroups(User user) {
         List<OrderGroup> orderGroups = orderGroupRepository.findByUserId(user.getId()).orElseThrow(
                 () -> new OrderNotFoundException("해당 사용자의 주문 내역이 존재하지 않습니다.")
         );
 
-        List<OrderGroupResponseDto> list = new ArrayList<>();
+        List<OrderGroupResponse> list = new ArrayList<>();
         List<OrdersResponse> ordersResponseList = new ArrayList<>();
         for(OrderGroup orderGroup : orderGroups) {
             List<Orders> orders = orderGroup.getOrders();
             for(Orders order : orders) {
                 ordersResponseList.add(new OrdersResponse(order));
-                list.add(new OrderGroupResponseDto(orderGroup, ordersResponseList));
+                list.add(new OrderGroupResponse(orderGroup, ordersResponseList));
             }
         }
 
@@ -98,7 +89,7 @@ public class OrderGroupService {
      * 사용자의 주문내역 상세 조회
      */
     @Transactional(readOnly = true)
-    public OrderGroupResponseDto getOrderGroup(Long orderGroupId, User user){
+    public OrderGroupResponse getOrderGroup(Long orderGroupId, User user){
         OrderGroup orderGroup = findByOrderGroupId(orderGroupId);
 
         if (!UserType.ADMIN.equals(user.getUserType())) {
@@ -110,7 +101,7 @@ public class OrderGroupService {
             new OrdersResponse(order);
         }
 
-        return new OrderGroupResponseDto(orderGroup, OrdersResponses);
+        return new OrderGroupResponse(orderGroup, OrdersResponses);
     }
 
     /**

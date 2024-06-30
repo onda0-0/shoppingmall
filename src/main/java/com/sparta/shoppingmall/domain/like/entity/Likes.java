@@ -36,21 +36,20 @@ public class Likes extends Timestamped {
     private User user;
 
     @Builder
-    public Likes(ContentType contenttype, Long contentId, LikeStatus status, User user) {
-        this.contentType = contenttype;
+    public Likes(ContentType contentType, Long contentId, LikeStatus status, User user) {
+        this.contentType = contentType;
         this.contentId = contentId;
         this.status = status;
         this.user = user;
     }
 
-    /**
-     * 생성자
-     */
-    public Likes(LikesRequest likesRequest, User user){
-        this.contentType = likesRequest.getContentType();
-        this.contentId = likesRequest.getContentId();
-        this.status = LikeStatus.CANCELED;
-        this.user = user;
+    public static Likes createLike(LikesRequest request, User user) {
+        return Likes.builder()
+                .contentType(request.getContentType())
+                .contentId(request.getContentId())
+                .status(LikeStatus.LIKED)
+                .user(user)
+                .build();
     }
 
     /**

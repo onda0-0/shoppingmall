@@ -11,6 +11,6 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
 
     Optional<CartProduct> findByProductId(Long productId);
 
-    Page<CartProduct> findAllByCartId(Long cartId, Pageable pageable);
+    Page<CartProduct> findAllByCartId(Pageable pageable, Long cartId);
 
 }

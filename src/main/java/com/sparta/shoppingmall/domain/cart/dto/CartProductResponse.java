@@ -1,20 +1,23 @@
 package com.sparta.shoppingmall.domain.cart.dto;
 
-import com.sparta.shoppingmall.domain.cart.entity.Cart;
-import com.sparta.shoppingmall.domain.product.entity.Product;
+import com.sparta.shoppingmall.domain.cart.entity.CartProduct;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class CartProductResponse {
 
-    private final Long id;
-    private final Cart cart;
-    private final Product product;
+    private final Long cartId;
+    private final String productName;
+    private final Long productPrice;
 
-    public CartProductResponse(Long id, Cart cart, Product product) {
-        this.id = id;
-        this.cart = cart;
-        this.product = product;
+    public static CartProductResponse of(CartProduct cartProduct) {
+        return CartProductResponse.builder()
+                .cartId(cartProduct.getCart().getId())
+                .productName(cartProduct.getProduct().getName())
+                .productPrice(cartProduct.getProduct().getPrice())
+                .build();
     }
 
 }

@@ -47,7 +47,7 @@ public class LikesService {
      * 좋아요 생성 (해당 content에 최초 좋아요 실행일 때)
      */
     private Likes createLikes(LikesRequest request, User user) {
-        Likes likes = new Likes(request, user);
+        Likes likes = Likes.createLike(request, user);
         likesRepository.save(likes);
 
         return likes;
@@ -78,8 +78,4 @@ public class LikesService {
             case COMMENT -> commentService.getComment(contentId).decreaseLikeCount();
         }
     }
-
-
-
-
 }
