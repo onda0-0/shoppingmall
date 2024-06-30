@@ -1,11 +1,13 @@
 package com.sparta.shoppingmall.domain.product.dto;
 
+import com.sparta.shoppingmall.domain.product.entity.Product;
 import com.sparta.shoppingmall.domain.product.entity.ProductStatus;
 import com.sparta.shoppingmall.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class ProductResponse {
 
     private final Long id;
@@ -15,13 +17,14 @@ public class ProductResponse {
     private final Long price;
     private final ProductStatus status;
 
-    @Builder
-    public ProductResponse(Long id, String name, Long price, ProductStatus status, User user) {
-        this.id = id;
-        this.userId = user.getId();
-        this.username = user.getUsername(); //사용자 ID
-        this.name = name;
-        this.price = price;
-        this.status = status;
+    public static ProductResponse of(Product product) {
+        return ProductResponse.builder()
+                .id(product.getId())
+                .userId(product.getUser().getId())
+                .username(product.getUser().getUsername())
+                .name(product.getName())
+                .price(product.getPrice())
+                .status(product.getStatus())
+                .build();
     }
 }

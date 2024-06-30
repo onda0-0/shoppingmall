@@ -40,13 +40,7 @@ public class ProductService {
 
         productRepository.save(product);
 
-        return ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .status(product.getStatus())
-                .user(product.getUser())
-                .build();
+        return ProductResponse.of(product);
     }
 
 
@@ -62,17 +56,12 @@ public class ProductService {
         statuses.add(ProductStatus.RECOMMEND);
 
         Page<Product> products = productRepository.findAllByStatusIn(pageable, statuses);
+        String totalProduct = PageUtil.validateAndSummarizePage(pageNum, products);
 
         List<ProductResponse> productResponses = new ArrayList<>();
 
         for (Product product : products) {
-            ProductResponse productResponse = ProductResponse.builder()
-                    .id(product.getId())
-                    .name(product.getName())
-                    .price(product.getPrice())
-                    .status(product.getStatus())
-                    .user(product.getUser())
-                    .build();
+            ProductResponse productResponse = ProductResponse.of(product);
             productResponses.add(productResponse);
         }
 
@@ -87,13 +76,7 @@ public class ProductService {
     public ProductResponse getProduct(Long productId) {
         Product product = findByProductId(productId);
 
-        return ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .status(product.getStatus())
-                .user(product.getUser())
-                .build();
+        return ProductResponse.of(product);
     }
 
     /**
@@ -111,13 +94,7 @@ public class ProductService {
 
         product.update(productRequest.getName(), productRequest.getPrice());
 
-        return ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .status(product.getStatus())
-                .user(product.getUser())
-                .build();
+        return ProductResponse.of(product);
     }
 
 
