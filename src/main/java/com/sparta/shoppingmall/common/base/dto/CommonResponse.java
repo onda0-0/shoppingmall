@@ -1,12 +1,19 @@
 package com.sparta.shoppingmall.common.base.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
-@Builder
+@Getter
 public class CommonResponse <T> {
 
-    private int statusCode;
-    private String message;
-    private T data;
+    private final int statusCode;
+    private final String message;
+    private final T data;
 
+    @Builder
+    public CommonResponse(int statusCode, String message, T data) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+    }
 }

@@ -1,6 +1,7 @@
 package com.sparta.shoppingmall.domain.product.entity;
 
 import com.sparta.shoppingmall.common.base.entity.Timestamped;
+import com.sparta.shoppingmall.domain.cart.entity.CartProduct;
 import com.sparta.shoppingmall.domain.comment.entity.Comment;
 import com.sparta.shoppingmall.domain.order.entity.OrderGroup;
 import com.sparta.shoppingmall.domain.product.dto.ProductRequest;
@@ -47,6 +48,9 @@ public class Product extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="order_group_id")
     private OrderGroup orderGroup;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartProduct> cartProducts = new ArrayList<>();
 
     /**
      * 생성자

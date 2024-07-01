@@ -27,7 +27,7 @@ public class CartController {
      * 장바구니에 상품 단건 담기
      */
     @PostMapping("/products")
-    public ResponseEntity<CommonResponse> creatCartProduct(
+    public ResponseEntity<CommonResponse<CartProductResponse>> creatCartProduct(
             @Valid @RequestBody CartProductRequest cartProductRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -39,7 +39,7 @@ public class CartController {
      * 장바구니에 상품 리스트 조회
      */
     @GetMapping("/products")
-    public ResponseEntity<CommonResponse> getCartProducts(
+    public ResponseEntity<CommonResponse<CartResponse>> getCartProducts(
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum,
             @RequestParam(value = "isDesc", required = false, defaultValue = "true") final Boolean isDesc,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -52,7 +52,7 @@ public class CartController {
      * 장바구니에 상품 단건 삭제
      */
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<CommonResponse> deleteCartProduct(
+    public ResponseEntity<CommonResponse<Long>> deleteCartProduct(
             @PathVariable Long productId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {

@@ -26,7 +26,7 @@ public class ProductController {
      * 상품등록
      */
     @PostMapping
-    public ResponseEntity<CommonResponse> createProduct(
+    public ResponseEntity<CommonResponse<ProductResponse>> createProduct(
             @Valid @RequestBody ProductRequest productRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -38,7 +38,7 @@ public class ProductController {
      * 상품조회(전체) get api/products
      */
     @GetMapping
-    public ResponseEntity<CommonResponse> getProducts(
+    public ResponseEntity<CommonResponse<List<ProductResponse>>> getProducts(
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum,
             @RequestParam(value = "isDesc", required = false, defaultValue = "true") final Boolean isDesc
     ) {
@@ -51,7 +51,7 @@ public class ProductController {
      * 상품조회(단일)get api/products/{productId}
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<CommonResponse> getProduct(
+    public ResponseEntity<CommonResponse<ProductResponse>> getProduct(
             @PathVariable Long productId
     ){
         ProductResponse response = productService.getProduct(productId);
@@ -63,7 +63,7 @@ public class ProductController {
      * 상품수정 api/products/{productId}
      */
     @PatchMapping("/{productId}")
-    public ResponseEntity<CommonResponse> updateProduct(
+    public ResponseEntity<CommonResponse<ProductResponse>> updateProduct(
             @PathVariable Long productId,
             @Valid @RequestBody ProductRequest productRequest,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -76,7 +76,7 @@ public class ProductController {
      * 상품삭제 delete  api/products
      */
     @DeleteMapping("/{productId}")
-    public ResponseEntity<CommonResponse> deleteProduct(
+    public ResponseEntity<CommonResponse<Long>> deleteProduct(
             @PathVariable Long productId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){

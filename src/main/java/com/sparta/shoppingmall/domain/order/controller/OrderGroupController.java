@@ -26,7 +26,7 @@ public class OrderGroupController {
      * 상품 주문
      */
     @PostMapping
-    public ResponseEntity<CommonResponse> createOrder(
+    public ResponseEntity<CommonResponse<OrderGroupResponse>> createOrder(
             @RequestBody OrderGroupRequest orderGroupRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -38,7 +38,7 @@ public class OrderGroupController {
      * 사용자의 모든 주문내역 조회하기
      */
     @GetMapping
-    public ResponseEntity<CommonResponse> getOrderGroups(
+    public ResponseEntity<CommonResponse<List<OrderGroupResponse>>> getOrderGroups(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         List<OrderGroupResponse> response = orderGroupService.getOrderGroups(userDetails.getUser());
@@ -49,7 +49,7 @@ public class OrderGroupController {
      * 사용자의 주문내역 상세 조회
      */
     @GetMapping("/{orderGroupId}")
-    public ResponseEntity<CommonResponse> getOrderGroup(
+    public ResponseEntity<CommonResponse<OrderGroupResponse>> getOrderGroup(
         @PathVariable Long orderGroupId,
         @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -61,7 +61,7 @@ public class OrderGroupController {
      * 주문 취소
      */
     @PutMapping("/{groupId}")
-    public ResponseEntity<CommonResponse> cancelOrder(
+    public ResponseEntity<CommonResponse<Long>> cancelOrder(
             @PathVariable Long groupId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {

@@ -17,7 +17,7 @@ public class PageUtil {
         }
 
         Sort.Direction direction = isDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Sort sort = Sort.by(direction, "createdAt");
+        Sort sort = Sort.by(direction, "createAt");
 
         return PageRequest.of(pageNum-1, pageSize, sort);
     }

@@ -28,7 +28,7 @@ public class LikesController {
      * 상품 좋아요 토글
      */
     @PostMapping("/products/{productId}/like")
-    public ResponseEntity<CommonResponse> toggleProductLike (
+    public ResponseEntity<CommonResponse<LikesResponse>> toggleProductLike (
             @PathVariable Long productId,
             @Valid @RequestBody LikesRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -43,7 +43,7 @@ public class LikesController {
      * 댓글 좋아요 토글
      */
     @PostMapping("/comments/{commentId}/like")
-    public ResponseEntity<CommonResponse> toggleCommentLike (
+    public ResponseEntity<CommonResponse<LikesResponse>> toggleCommentLike (
             @PathVariable Long commentId,
             @Valid @RequestBody LikesRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails

@@ -28,10 +28,10 @@ public class UserController {
      * 일반 회원 - 회원 가입
      */
     @PostMapping
-    public ResponseEntity<CommonResponse> createUser(
-            @Valid @RequestBody SignupRequest requestDTO
+    public ResponseEntity<CommonResponse<SignupResponse>> createUser(
+            @Valid @RequestBody SignupRequest request
     ) {
-        SignupResponse response = userService.createUser(requestDTO);
+        SignupResponse response = userService.createUser(request);
         return getResponseEntity(response, "회원가입 성공");
     }
 
@@ -39,10 +39,10 @@ public class UserController {
      * 관리자 - 회원가입
      */
     @PostMapping("/admin")
-    public ResponseEntity<CommonResponse> createAdminUser(
-            @Valid @RequestBody SignupRequest requestDTO
+    public ResponseEntity<CommonResponse<SignupResponse>> createAdminUser(
+            @Valid @RequestBody SignupRequest request
     ) {
-        SignupResponse response = userService.createAdminUser(requestDTO);
+        SignupResponse response = userService.createAdminUser(request);
         return getResponseEntity(response, "회원가입 성공");
     }
 
@@ -50,11 +50,11 @@ public class UserController {
      * 회원 탈퇴
      */
     @PatchMapping("/withdraw")
-    public ResponseEntity<CommonResponse> withdrawUser(
-            @Valid @RequestBody WithdrawRequest requestDTO,
+    public ResponseEntity<CommonResponse<Long>> withdrawUser(
+            @Valid @RequestBody WithdrawRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        Long response = userService.withdrawUser(requestDTO, userDetails.getUser());
+        Long response = userService.withdrawUser(request, userDetails.getUser());
         return getResponseEntity(response, "회원탈퇴 성공");
 
     }
@@ -63,7 +63,7 @@ public class UserController {
      * 로그아웃
      */
     @DeleteMapping("/logout")
-    public ResponseEntity<CommonResponse> logout(
+    public ResponseEntity<CommonResponse<Long>> logout(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         Long response = userService.logout(userDetails.getUser().getId());
@@ -74,7 +74,7 @@ public class UserController {
      * 로그인한 사용자 프로필 조회
      */
     @GetMapping("/{userId}/profiles")
-    public ResponseEntity<CommonResponse> userProfile(
+    public ResponseEntity<CommonResponse<ProfileResponse>> userProfile(
             @PathVariable Long userId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -86,7 +86,7 @@ public class UserController {
      * 로그인한 사용자 프로필 수정
      */
     @PatchMapping("/{userId}/profiles")
-    public ResponseEntity<CommonResponse> updateProfile(
+    public ResponseEntity<CommonResponse<UserResponse>> updateProfile(
             @PathVariable Long userId,
             @Valid @RequestBody ProfileRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -99,7 +99,7 @@ public class UserController {
      * 비밀번호 변경
      */
     @PutMapping("/update-password")
-    public ResponseEntity<CommonResponse> updatePassword(
+    public ResponseEntity<CommonResponse<UserResponse>> updatePassword(
             @Valid @RequestBody EditPasswordRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -112,7 +112,7 @@ public class UserController {
      */
     @Secured("ADMIN")
     @GetMapping("/admin")
-    public ResponseEntity<CommonResponse> getUserList(){
+    public ResponseEntity<CommonResponse<List<AdminUserResponse>>> getUserList(){
         List<AdminUserResponse> response = userService.getUserList();
         return getResponseEntity(response, "회원 전체 조회 성공");
     }
@@ -122,7 +122,7 @@ public class UserController {
      */
     @Secured("ADMIN")
     @PutMapping("/{userId}/admin")
-    public ResponseEntity<CommonResponse> updateUser(
+    public ResponseEntity<CommonResponse<AdminUserResponse>> updateUser(
             @PathVariable Long userId,
             @Valid @RequestBody AdminUpdateUserRequest request
     ) {

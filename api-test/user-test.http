@@ -4,7 +4,6 @@
 @name = 홍길동
 @email = test@gmail.com
 @address = 대전 서구 둔산동
-@userType = ADMIN
 
 
 @username1 = momoysm
@@ -12,12 +11,11 @@
 @name1 = 윤성모
 @email1 = test@gmail.com
 @address1 = 서울
-@userType1 = USER
 
 @newPassword=Momosfg123@
 
 ###회원가입 -> ok
-POST http://localhost:8080/api/users/signup
+POST http://localhost:8080/api/users/admin
 Content-Type: application/json
 
 {
@@ -25,12 +23,11 @@ Content-Type: application/json
   "password" : "{{password}}",
   "name" : "{{name}}",
   "email" : "{{email}}",
-  "address" : "{{address}}",
-  "userType" : "{{userType}}"
+  "address" : "{{address}}"
 }
 
 ###회원가입1 -> 됨
-POST http://localhost:8080/api/users/signup
+POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
@@ -38,8 +35,7 @@ Content-Type: application/json
   "password" : "{{password1}}",
   "name" : "{{name1}}",
   "email" : "{{email1}}",
-  "address" : "{{address1}}",
-  "userType" : "{{userType1}}"
+  "address" : "{{address1}}"
 }
 
 ###로그인 -> ok
@@ -67,7 +63,7 @@ Content-Type: application/json
 Authorization:{{Authorization}}
 
 {
-  "password" : "Momosfg123@"
+  "password" : "{{newPassword}}"
 
 }
 

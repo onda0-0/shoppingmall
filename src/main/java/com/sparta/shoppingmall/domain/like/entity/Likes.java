@@ -47,7 +47,7 @@ public class Likes extends Timestamped {
         return Likes.builder()
                 .contentType(request.getContentType())
                 .contentId(request.getContentId())
-                .status(LikeStatus.LIKED)
+                .status(LikeStatus.CANCELED)
                 .user(user)
                 .build();
     }

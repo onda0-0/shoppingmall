@@ -26,7 +26,7 @@ public class CommentController {
      * 댓글 등록
      */
     @PostMapping
-    public ResponseEntity<CommonResponse> createComment(
+    public ResponseEntity<CommonResponse<CommentResponse>> createComment(
             @PathVariable Long productId,
             @Valid @RequestBody CommentRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -39,7 +39,7 @@ public class CommentController {
      * 해당 상품의 전체 댓글 조회
      */
     @GetMapping
-    public ResponseEntity<CommonResponse> getComments(
+    public ResponseEntity<CommonResponse<List<CommentResponse>>> getComments(
             @PathVariable Long productId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
@@ -51,7 +51,7 @@ public class CommentController {
      * 댓글 수정
      */
     @PatchMapping("/{commentId}")
-    public ResponseEntity<CommonResponse> updateComment(
+    public ResponseEntity<CommonResponse<CommentResponse>> updateComment(
             @PathVariable Long productId,
             @PathVariable Long commentId,
             @Valid @RequestBody CommentRequest request,
@@ -65,7 +65,7 @@ public class CommentController {
      * 댓글 삭제
      */
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<CommonResponse> deleteComment(
+    public ResponseEntity<CommonResponse<Long>> deleteComment(
             @PathVariable Long productId,
             @PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetails

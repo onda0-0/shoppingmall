@@ -25,7 +25,7 @@ public class FollowsController {
      * 팔로우
      */
     @PostMapping("/{followingId}")
-    public ResponseEntity<CommonResponse> followUser(
+    public ResponseEntity<CommonResponse<FollowsResponse>> followUser(
             @PathVariable Long followingId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -37,7 +37,7 @@ public class FollowsController {
      * 팔로우 취소
      */
     @DeleteMapping("/{followingId}")
-    public ResponseEntity<CommonResponse> followCancel(
+    public ResponseEntity<CommonResponse<FollowsResponse>> followCancel(
             @PathVariable Long followingId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
@@ -49,7 +49,7 @@ public class FollowsController {
      * 팔로잉 목록 조회
      */
     @GetMapping("/followings")
-    public ResponseEntity<CommonResponse> getFollowings(
+    public ResponseEntity<CommonResponse<List<FollowsResponse>>> getFollowings(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         List<FollowsResponse> response = followsService.getFollowings(userDetails.getUser());
@@ -60,7 +60,7 @@ public class FollowsController {
      * 팔로워 목록 조회
      */
     @GetMapping("/followers")
-    public ResponseEntity<CommonResponse> getFollowers(
+    public ResponseEntity<CommonResponse<List<FollowsResponse>>> getFollowers(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         List<FollowsResponse> response = followsService.getFollowers(userDetails.getUser());
@@ -72,7 +72,7 @@ public class FollowsController {
      */
     @Secured("ADMIN")
     @DeleteMapping("/{followerId}/{followingId}")
-    public ResponseEntity<CommonResponse> followCancelAdmin(
+    public ResponseEntity<CommonResponse<FollowsResponse>> followCancelAdmin(
             @PathVariable(name = "followerId") Long followerId,
             @PathVariable(name = "followingId") Long followingId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -86,7 +86,7 @@ public class FollowsController {
      */
     @Secured("ADMIN")
     @GetMapping("/{followerId}/follower")
-    public ResponseEntity<CommonResponse> getFollowingsAdmin(
+    public ResponseEntity<CommonResponse<List<FollowsResponse>>> getFollowingsAdmin(
             @PathVariable Long followerId
     ) {
         List<FollowsResponse> response = followsService.getFollowingsAdmin(followerId);
@@ -98,7 +98,7 @@ public class FollowsController {
      */
     @Secured("ADMIN")
     @GetMapping("/{followingId}/following")
-    public ResponseEntity<CommonResponse> getFollowersAdmin(
+    public ResponseEntity<CommonResponse<List<FollowsResponse>>> getFollowersAdmin(
             @PathVariable Long followingId
     ) {
         List<FollowsResponse> response = followsService.getFollowersAdmin(followingId);

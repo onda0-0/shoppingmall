@@ -15,35 +15,36 @@ public final class ControllerUtil {
     private ControllerUtil() {
     }
 
-    public static ResponseEntity<CommonResponse> getFieldErrorResponseEntity(BindingResult bindingResult, String message) {
+    public static <T> ResponseEntity<CommonResponse<T>> getFieldErrorResponseEntity(BindingResult bindingResult, String message) {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
             log.error("{} field : {}", fieldError.getField(), fieldError.getDefaultMessage());
         }
 
         return ResponseEntity.badRequest()
-                .body(CommonResponse.<List<FieldError>>builder()
+                .body((CommonResponse<T>) CommonResponse.<List<FieldError>>builder()
                         .statusCode(HttpStatus.BAD_REQUEST.value())
                         .message(message)
                         .data(fieldErrors)
                         .build());
     }
 
-    public static ResponseEntity<CommonResponse> getBadRequestResponseEntity(Exception e) {
+    public static <T> ResponseEntity<CommonResponse<T>> getBadRequestResponseEntity(Exception e) {
         return ResponseEntity.badRequest()
-                .body(CommonResponse.builder()
+                .body((CommonResponse<T>) CommonResponse.builder()
                     .statusCode(HttpStatus.BAD_REQUEST.value())
                     .message(e.getMessage())
                     .build());
     }
 
-    public static ResponseEntity<CommonResponse> getResponseEntity(Object response, String message) {
+    public static <T> ResponseEntity<CommonResponse<T>> getResponseEntity(Object response, String message) {
+
         return ResponseEntity.ok()
-                .body(CommonResponse.builder()
-                    .statusCode(HttpStatus.OK.value())
-                    .message(message)
-                    .data(response)
-                    .build());
+                .body((CommonResponse<T>) CommonResponse.builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message(message)
+                        .data(response)
+                        .build());
     }
 
 }
