@@ -17,7 +17,7 @@ import static com.sparta.shoppingmall.common.util.ControllerUtil.getBadRequestRe
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(GlobalDuplicatedException.class)
-    protected <T> ResponseEntity<CommonResponse<T>> globalMisMatchException(GlobalMismatchException e) {
+    protected <T> ResponseEntity<CommonResponse<T>> globalDuplicatedException(GlobalDuplicatedException e) {
 
         return getBadRequestResponseEntity(e);
     }
@@ -29,13 +29,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(GlobalNotFoundException.class)
-    protected <T> ResponseEntity<CommonResponse<T>> globalNotFoundException(GlobalMismatchException e) {
+    protected <T> ResponseEntity<CommonResponse<T>> globalNotFoundException(GlobalNotFoundException e) {
 
         return getBadRequestResponseEntity(e);
     }
 
     @ExceptionHandler(GlobalRejectedException.class)
-    protected <T> ResponseEntity<CommonResponse<T>> globalRejectedException(GlobalMismatchException e) {
+    protected <T> ResponseEntity<CommonResponse<T>> globalRejectedException(GlobalRejectedException e) {
 
         return getBadRequestResponseEntity(e);
     }
