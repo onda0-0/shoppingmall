@@ -17,16 +17,21 @@ public class ProfileResponse {
 
     private final String address;
 
+    private final Long likedProductCount;
+    private final Long likedCommentCount;
+
     private final LocalDateTime createAt;
 
     private final LocalDateTime updateAt;
 
 
-    public ProfileResponse(User user) {
+    public ProfileResponse(User user,Long likedProductCount,Long likedCommentCount) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.address = user.getAddress();
+        this.likedProductCount=likedProductCount;
+        this.likedCommentCount=likedCommentCount;
         this.createAt = user.getCreateAt();
         this.updateAt = user.getUpdateAt();
     }

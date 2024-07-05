@@ -2,9 +2,11 @@ package com.sparta.shoppingmall.domain.user.controller;
 
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
 import com.sparta.shoppingmall.common.security.UserDetailsImpl;
+import com.sparta.shoppingmall.domain.product.dto.ProductResponse;
 import com.sparta.shoppingmall.domain.user.dto.*;
 import com.sparta.shoppingmall.domain.user.service.UserService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -129,4 +131,5 @@ public class UserController {
         AdminUserResponse response = userService.updateUser(request, userId);
         return getResponseEntity(response, "회원 전체 조회 성공");
     }
+
 }

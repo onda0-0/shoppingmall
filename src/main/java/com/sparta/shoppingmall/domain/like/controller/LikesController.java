@@ -2,10 +2,12 @@ package com.sparta.shoppingmall.domain.like.controller;
 
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
 import com.sparta.shoppingmall.common.exception.customexception.LikeMismatchException;
+import com.sparta.shoppingmall.domain.comment.dto.CommentResponse;
 import com.sparta.shoppingmall.domain.like.dto.LikesResponse;
 import com.sparta.shoppingmall.domain.like.service.LikesService;
 import com.sparta.shoppingmall.domain.like.dto.LikesRequest;
 import com.sparta.shoppingmall.common.security.UserDetailsImpl;
+import com.sparta.shoppingmall.domain.product.dto.ProductResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.sparta.shoppingmall.common.util.ControllerUtil.*;
@@ -62,5 +65,6 @@ public class LikesController {
             throw new LikeMismatchException("PathVariable의 contentId와 RequestBody의 contentId가 다릅니다.");
         }
     }
+
 
 }

@@ -16,6 +16,7 @@ public class ProductResponse {
     private final String name;
     private final Long price;
     private final ProductStatus status;
+    private final Integer likeCount;
 
     public static ProductResponse of(Product product) {
         return ProductResponse.builder()
@@ -25,6 +26,7 @@ public class ProductResponse {
                 .name(product.getName())
                 .price(product.getPrice())
                 .status(product.getStatus())
+                .likeCount(product.getLikeCount())
                 .build();
     }
 }

@@ -5,6 +5,8 @@ import com.sparta.shoppingmall.common.security.UserDetailsImpl;
 import com.sparta.shoppingmall.domain.comment.dto.CommentRequest;
 import com.sparta.shoppingmall.domain.comment.dto.CommentResponse;
 import com.sparta.shoppingmall.domain.comment.service.CommentService;
+import com.sparta.shoppingmall.domain.like.service.LikesService;
+import com.sparta.shoppingmall.domain.product.dto.ProductResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import static com.sparta.shoppingmall.common.util.ControllerUtil.getResponseEnti
 public class CommentController {
 
     private final CommentService commentService;
+    private final LikesService likesService;
 
     /**
      * 댓글 등록
@@ -73,5 +76,26 @@ public class CommentController {
         Long response = commentService.deleteComment(productId, commentId, userDetails.getUser());
         return getResponseEntity(response, "댓글 삭제 성공");
     }
+
+
+    /**
+     * 내가 좋아하는 댓글 목록 조회기능 추가
+     */
+    @GetMapping("/liked")
+    public List<CommentResponse> getLikedCommentsByUser(@RequestParam Long userId,
+                                                        @RequestParam int page,
+                                                        @RequestParam(defaultValue = "true") boolean isDesc) {
+        return likesService.getLikedCommentsByUser(userId, page, isDesc);
+    }
+
+   /* @GetMapping("/liked")
+    public ResponseEntity<CommonResponse<List<CommentResponse>>> getLikedCommentByUser(
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum,
+            @RequestParam(value = "isDesc", required = false, defaultValue = "true") final Boolean isDesc
+    ){
+        List<CommentResponse> response = commentService.getComments(pageNum, isDesc);
+        return getResponseEntity(response, "내가 좋아하는 댓글 목록조회 기능 추가");
+    }*/
+
 
 }

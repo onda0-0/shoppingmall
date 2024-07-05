@@ -2,6 +2,7 @@ package com.sparta.shoppingmall.domain.product.controller;
 
 import com.sparta.shoppingmall.common.base.dto.CommonResponse;
 import com.sparta.shoppingmall.common.security.UserDetailsImpl;
+import com.sparta.shoppingmall.domain.like.service.LikesService;
 import com.sparta.shoppingmall.domain.product.dto.ProductRequest;
 import com.sparta.shoppingmall.domain.product.dto.ProductResponse;
 import com.sparta.shoppingmall.domain.product.service.ProductService;
@@ -21,6 +22,7 @@ import static com.sparta.shoppingmall.common.util.ControllerUtil.getResponseEnti
 public class ProductController {
 
     private final ProductService productService;
+    private final LikesService likesService;
 
     /**
      * 상품등록
@@ -83,5 +85,36 @@ public class ProductController {
         Long response = productService.deleteProduct(productId, userDetails.getUser());
         return getResponseEntity(response, "상품 삭제 성공");
     }
+
+    /**
+     * 내가 좋아하는 게시글 목록 조회
+     */
+    @GetMapping("/liked")
+    public ResponseEntity<CommonResponse<List<ProductResponse>>> getLikedProductsByUser(
+            @RequestParam Long userId,
+            @RequestParam int page,
+            @RequestParam(defaultValue = "true") boolean isDesc
+    ){
+        List<ProductResponse> response = likesService.getLikedProductsByUser(userId, page, isDesc);
+        return getResponseEntity(response, "내가 좋아하는 게시글 목록조회 기능 추가");
+    }
+    /*@GetMapping("/liked")
+    public ResponseEntity<CommonResponse<List<ProductResponse>>> getLikedPostByUser(
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum,
+            @RequestParam(value = "isDesc", required = false, defaultValue = "true") final Boolean isDesc
+    ){
+        List<ProductResponse> response = productService.getLikedProducts(pageNum, isDesc);
+        return getResponseEntity(response, "내가 좋아하는 게시글 목록조회 기능 추가");
+    }*/
+    /*@GetMapping("/liked")
+    public ResponseEntity<CommonResponse<List<ProductResponse>>> getLikedProductsByUser(
+            @RequestParam Long userId,
+            @RequestParam int page,
+            @RequestParam(defaultValue = "true") boolean isDesc
+    ){
+        List<ProductResponse> response = likesService.getLikedProductsByUser(userId, page, isDesc);
+        return getResponseEntity(response, "내가 좋아하는 게시글 목록조회 기능 추가");
+    }*/
+
 }
 

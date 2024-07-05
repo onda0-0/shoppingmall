@@ -31,7 +31,7 @@ public class OrderGroupService {
      * 주문하기 (OrderGroup생성 -> Order생성)
      */
     @Transactional
-    public OrderGroupResponse createOrder(OrderGroupRequest request, User user) {
+    public OrderGroupResponse createOrder(OrderGroupRequest request, User user) {// 여기문제
         //주문한 상품들 불러오기
         List<Long> productIdList = request.getProductIdList();
         List<Product> productList = new ArrayList<>();

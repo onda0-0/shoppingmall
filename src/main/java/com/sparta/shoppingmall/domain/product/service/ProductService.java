@@ -68,7 +68,6 @@ public class ProductService {
         return productResponses;
     }
 
-
     /**
      * 상품조회(단일)get api/products/{productId}
      */
@@ -123,6 +122,30 @@ public class ProductService {
         return productRepository.findById(productId).orElseThrow(
                 () -> new ProductNotFoundException("해당 상품이 존재하지 않습니다.")
         );
+    }
+
+    /**
+     * 내가 좋아요한 상품 조회
+     */
+    @Transactional(readOnly = true)
+    public List<ProductResponse> getLikedProducts(final Integer pageNum, final Boolean isDesc) {
+        Pageable pageable = PageUtil.createPageable(pageNum, PageUtil.PAGE_SIZE_FIVE, isDesc);
+
+        List<ProductStatus> statuses = new ArrayList<>();
+        statuses.add(ProductStatus.ONSALE);
+        statuses.add(ProductStatus.RECOMMEND);
+
+        Page<Product> products = productRepository.findAllByStatusIn(pageable, statuses);
+        String totalProduct = PageUtil.validateAndSummarizePage(pageNum, products);
+
+        List<ProductResponse> productResponses = new ArrayList<>();
+
+        for (Product product : products) {
+            ProductResponse productResponse = ProductResponse.of(product);
+            productResponses.add(productResponse);
+        }
+
+        return productResponses;
     }
 
 }

@@ -1,0 +1,63 @@
+### Get first page of liked comments
+GET http://localhost:8080/api/comments/liked
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "pageNum": 1,
+  "pageSize": 5,
+  "isDesc": true
+}
+
+### Get second page of liked comments
+GET http://localhost:8080/api/comments/liked
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "pageNum": 2,
+  "pageSize": 5,
+  "isDesc": true
+}
+
+### Get first page of liked products
+GET http://localhost:8080/api/products/liked
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "pageNum": 1,
+  "pageSize": 5,
+  "isDesc": true
+}
+
+### Get second page of liked products
+GET http://localhost:8080/api/products/liked
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "pageNum": 2,
+  "pageSize": 5,
+  "isDesc": true
+}
+
+### Get first page of liked comments
+GET http://localhost:8080/api/comments/liked?pageNum=1&pageSize=5&isDesc=true
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+### Get second page of liked comments
+GET http://localhost:8080/api/comments/liked?pageNum=2&pageSize=5&isDesc=true
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+### Get first page of liked products
+GET http://localhost:8080/api/products/liked?pageNum=1&pageSize=5&isDesc=true
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+### Get second page of liked products
+GET http://localhost:8080/api/products/liked?pageNum=2&pageSize=5&isDesc=true
+Authorization: {{Authorization}}
+Content-Type: application/json

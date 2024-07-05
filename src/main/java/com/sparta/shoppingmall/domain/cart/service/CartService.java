@@ -54,7 +54,7 @@ public class CartService {
     }
 
     /**
-     * 장바구니에 상품 리스트 조회
+     * 장바구니에 상품 리스트 조회 -> 여기 조회 안됨
      */
     @Transactional
     public CartResponse getCartProducts(Integer pageNum, Boolean isDesc, User user) {
